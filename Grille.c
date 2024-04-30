@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include "Grille.h"
+#include <curses.h>
 
-g* Grille_allouer(int n, int m)
+g * Grille_allouer(int n, int m)
 {
     g* grille = malloc(sizeof(g));
     if( grille == NULL || n<=0 || m<=0 ) { return NULL; }
@@ -12,30 +14,36 @@ g* Grille_allouer(int n, int m)
     grille->m = m;
 
     grille->tab = malloc(n*sizeof(char**));
-    int i;
-    int j;
+    int i, j;
     for (i=0; i<n; i++)
     {
-        grille->tab[i] = malloc(m*sizeof(char*))
-        for(j=0; j<m, j++)
+        grille->tab[i] = malloc(m*sizeof(char*));
+        for(j=0; j<m; j++)
         {
-            grill->tab[i][j] = malloc(sizeof(char[8]));
+            grille->tab[i][j] = malloc(sizeof(char[8]));
         }
     }
     return grille;
 }
 
-void Grille_vider(g* grille)
+void Grille_vider(g * grille)
 {
     int i,j;
-    for (i=0; i<grill->n; i++)
+    for (i=0; i<grille->n; i++)
     {
+        printf("%d",i);
         for(j=0; j<grille->m; j++)
         {
+            printf("%d",j);
             grille->tab[i][j] = "\33[00m  ";
-            printf("%d\n", strlen(grille->tab[i][j] ));
+            printf("hgjfdhbifojd %lu\n", strlen(grille->tab[i][j]));
         }  
     }
+}
+
+bool Sur_serpent(int x, int y)
+{
+    return false;
 }
 
 void  Grille_tirage_fruit(g *grille)
@@ -54,7 +62,6 @@ void  Grille_tirage_fruit(g *grille)
 
 void grille_desallouer(g *grille)
 {
-    
     int i;
     for(i=0;i<grille->n;i++){
         free(grille->tab[i]);
@@ -64,10 +71,6 @@ void grille_desallouer(g *grille)
 
 void Grille_remplir(g* grille)
 {
-    //grille->tab[i] = "\33[00m  ";
+    grille->tab[grille->fruit[0]][grille->fruit[1]] = "\33[41m  ";
 }
 
-bool Sur_serpent(int x, int y)
-{
-    return false;
-}
