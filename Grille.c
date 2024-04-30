@@ -74,3 +74,22 @@ void Grille_remplir(g* grille)
     grille->tab[grille->fruit[0]][grille->fruit[1]] = "\33[41m  ";
 }
 
+void Grille_redessiner(g* grille)
+{
+    int i,j;
+    printf("hjhgfh");
+
+    for (i=0; i<grille->n; i++)
+    {
+        for(j=0; j<grille->m; j++)
+        {
+            if(i == 0 || i == (grille->n -1) || j == 0 || j == (grille->m -1) )
+                printf("\33[42m");
+            printf("%s", grille->tab[i][j]);
+        }
+        printf("\33[1E");
+    }
+
+}
+
+
