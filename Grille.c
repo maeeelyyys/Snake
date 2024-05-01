@@ -33,13 +33,10 @@ void Grille_vider(g * grille)
     int i,j;
     for (i=0; i<grille->n; i++)
     {
-        printf("%d",i);
         for(j=0; j<grille->m; j++)
         {
-            printf("%d",j);
             grille->tab[i][j] = "\33[00m  ";
-            printf("hgjfdhbifojd %lu\n", strlen(grille->tab[i][j]));
-        }  
+        }
     }
 }
 
@@ -79,7 +76,6 @@ void Grille_remplir(g* grille)
 void Grille_redessiner(g* grille)
 {
     int i,j;
-    printf("hjhgfh");
 
     for (i=0; i<grille->n; i++)
     {
@@ -91,7 +87,8 @@ void Grille_redessiner(g* grille)
         }
         printf("\33[1E");
     }
-
+    printf("\33[1E");
+    printf("\33[00m");
 }
 
 

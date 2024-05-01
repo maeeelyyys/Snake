@@ -26,14 +26,21 @@ typedef struct ListeSection{
 
 sec* creer_section();
 mai* creer_maillon();
-void supprimer_maillon_fin;
+void supprimer_maillon_fin();
 void desallouer_section();
-ls* creer_liste(){}
+ls* creer_liste();
 void ajouter_section_tete();
 void ajouter_section_queue();
 void ajouter_maillon_tete();
-
 void desallouer_liste();
 
 
+mai* acceder_pos_liste(ls *l, unsigned pos);
 
+void ajouter_section_queue(ls *l, mai *m);
+
+void ajouter_maillon_tete(ls *l,sec *s, mai *m);
+
+void supprimer_maillon_fin(ls *l);
+
+void desallouer_section(ls *l);

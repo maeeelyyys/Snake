@@ -7,5 +7,5 @@
 typedef struct Serpent
 {
     int tete[2];
-
-};
+    ls * sections;
+}serpent;

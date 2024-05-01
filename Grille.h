@@ -23,3 +23,5 @@ void Grille_remplir(g* grille);
 void Grille_desallouer(g* grille);
 
 void Grille_redessiner(g* grille);
+
+void Grille_remplir_serpent(g * grille);

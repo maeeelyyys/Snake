@@ -9,7 +9,7 @@ sec* creer_section();
 mai* creer_maillon();
 void supprimer_maillon_fin();
 void desallouer_section();
-ls* creer_liste(){}
+ls* creer_liste();
 void ajouter_section_tete();
 
 
