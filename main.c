@@ -3,7 +3,6 @@
 #include <time.h>
 #include <string.h>
 #include "Grille.h"
-#include <curses.h>
 
 int main()
 {

@@ -3,7 +3,9 @@
 #include <time.h>
 #include <string.h>
 #include "Grille.h"
-#include <curses.h>
+
+#define  TRUE 1
+#define  FALSE 0
 
 g * Grille_allouer(int n, int m)
 {
@@ -41,9 +43,9 @@ void Grille_vider(g * grille)
     }
 }
 
-bool Sur_serpent(int x, int y)
+int Sur_serpent(int x, int y)
 {
-    return false;
+    return 1;
 }
 
 void  Grille_tirage_fruit(g *grille)
@@ -54,7 +56,7 @@ void  Grille_tirage_fruit(g *grille)
     do{
         x=rand()%grille->n;
         y=rand()%grille->m;
-    }while(Sur_serpent(x,y)==true);
+    }while(Sur_serpent(x,y)==0);
 
     grille->fruit[0]=x;
     grille->fruit[1]=y;
