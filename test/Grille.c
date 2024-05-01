@@ -76,21 +76,24 @@ void Grille_remplir(g* grille)
 void Grille_redessiner(g* grille)
 {
     int i,j;
-    printf("\33[42m");
-    printf("hvrfejdowihu");
 
-    for (i=0; i<grille->n; i++)
+    for (i=0; i<grille->n+2; i++)
     {
-        for(j=0; j<grille->m; j++)
+        for(j=0; j<grille->m+2; j++)
         {
-            if(i == 0 || i == (grille->n -1) || j == 0 || j == (grille->m -1) )
-                printf("\33[42m");
-            printf("%s", grille->tab[i][j]);
+            if(i == 0 || i == (grille->n+1) || j == 0 || j == (grille->m+1) )
+            {
+                        printf("\33[42m  ");
+            }
+            else
+            {
+           	        printf("%s", grille->tab[i-1][j-1]);
+            }
         }
-        printf("\33[1E");
+        printf("\33[00m  ");
+        printf("\n");
     }
-    printf("\33[1E");
-    printf("\33[00m");
+    printf("\n");
 }
 
 

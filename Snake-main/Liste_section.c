@@ -43,7 +43,7 @@ void ajouter_section_queue(ls *l, mai *m){
 
 void ajouter_maillon_tete(ls *l,sec *s, mai *m){
     /*Si le serpent tourne*/
-    if (s->debut=NULL){
+    if (s->debut==NULL){
             s->fin=m;
     }
     m->suiv=s->debut;
@@ -56,7 +56,7 @@ void ajouter_maillon_tete(ls *l,sec *s, mai *m){
 
 
 void supprimer_maillon_fin(ls *l){
-    if(l->debut=NULL){
+    if(l->debut==NULL){
         return;
     }
     sec *s;
@@ -72,7 +72,7 @@ void supprimer_maillon_fin(ls *l){
     while (m->suiv->suiv!=NULL){
         m=m->suiv;
     }
-    m->suiv==NULL;
+    m->suiv=NULL;
     }
 }
 
