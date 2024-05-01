@@ -3,8 +3,6 @@
 #include <time.h>
 #include <string.h>
 #include "Grille.h"
-#include "Liste_section.h"
-#include "Serpent.h"
 
 int main()
 {

@@ -76,6 +76,8 @@ void Grille_remplir(g* grille)
 void Grille_redessiner(g* grille)
 {
     int i,j;
+    printf("\33[42m");
+    printf("hvrfejdowihu");
 
     for (i=0; i<grille->n; i++)
     {
