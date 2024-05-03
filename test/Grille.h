@@ -1,6 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include "liste_section.c"
+#include "serpent.c"
+
+#define  TRUE 1
+#define  FALSE 0
+
+#ifndef GRILLE_H_
+#define GRILLE_H_
 
 typedef struct {
 
@@ -25,3 +34,5 @@ void Grille_desallouer(g* grille);
 void Grille_redessiner(g* grille);
 
 void Grille_remplir_serpent(g * grille);
+
+#endif // GRILLE_H_

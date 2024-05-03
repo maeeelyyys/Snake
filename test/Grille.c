@@ -1,11 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
 #include "Grille.h"
 
-#define  TRUE 1
-#define  FALSE 0
 
 g * Grille_allouer(int n, int m)
 {
