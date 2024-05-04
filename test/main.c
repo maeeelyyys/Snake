@@ -1,14 +1,21 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include <ncurses.h>
-
-#include "Fonctions_Jeu.h"
+#include "Grille.h"
 
 int main(int argc, char** argv)
 {
-    // Initialisation de ncurses et du clavier
-    initscr();
+
+    ls* l=creer_liste(0,0);
+    afficher_ls(l);
+    ajouter_maillon_tete(l,1,0,0);
+    afficher_ls(l);
+    ajouter_section_queue(l);
+    afficher_ls(l);
+    desallouer_liste(l);
+       
+    // Initialisation de ncurses et du clavier(4 lignes)
+	initscr();
     raw();
     keypad(stdscr, TRUE);
     noecho();
