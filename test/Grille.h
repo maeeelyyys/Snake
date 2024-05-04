@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-
+#include "Serpent.h"
+//struct de la grille contenant le nombre de lignes (n), colonnes (m), un tableau
+//de tableau pour faire la grille dont chaque element contient une liste de charactere,
+//les coordonnees du fruit
 typedef struct {
 
     int n;
@@ -20,8 +23,12 @@ void Grille_tirage_fruit(g* grille);
 
 void Grille_remplir(g* grille);
 
+void Grille_serpent(g* grille, s* serp);
+
 void Grille_desallouer(g* grille);
 
 void Grille_redessiner(g* grille);
+
+void draw_Grille(g* grille, s* serp);
 
 void Grille_remplir_serpent(g * grille);

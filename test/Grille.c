@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <ncurses.h>
 #include "Grille.h"
 
 #define  TRUE 1
@@ -35,7 +36,7 @@ void Grille_vider(g * grille)
     {
         for(j=0; j<grille->m; j++)
         {
-            grille->tab[i][j] = "\33[00m  ";
+            grille->tab[i][j] = "  ";
         }
     }
 }
@@ -70,30 +71,82 @@ void grille_desallouer(g *grille)
 
 void Grille_remplir(g* grille)
 {
-    grille->tab[grille->fruit[0]][grille->fruit[1]] = "\33[41m  ";
+
+    grille->tab[grille->fruit[0]][grille->fruit[1]] = "1";
+}
+
+void Grille_serpent(g* grille, s* serp)
+{
+    int x = serp->tete[0];
+    int y = serp->tete[1];
+    grille->tab[x][y] = "2";
 }
 
 void Grille_redessiner(g* grille)
 {
-    int i,j;
+    int i,j,x,y;
+    x = getmaxx(stdscr)/2 - (grille->m);
+    y = getmaxy(stdscr)/2 - (grille->n)/2;
+    //move(y,x);
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLUE); //foreground , background color
+    wbkgd(stdscr, COLOR_PAIR(2));
+    wrefresh(stdscr);
+    init_color(COLOR_RED, 240, 105, 119);
+    init_color(COLOR_GREEN, 178, 240, 159);
+    init_color(COLOR_BLUE, 159, 189, 240);
+    init_pair(2,COLOR_WHITE, COLOR_RED);
+    init_pair(3,COLOR_WHITE,COLOR_BLUE);
+    init_pair(4,COLOR_WHITE,COLOR_BLACK);
+    init_pair(5,COLOR_WHITE,COLOR_GREEN);
 
     for (i=0; i<grille->n+2; i++)
     {
         for(j=0; j<grille->m+2; j++)
         {
+            attron(COLOR_PAIR(1));
+
             if(i == 0 || i == (grille->n+1) || j == 0 || j == (grille->m+1) )
             {
-                        printf("\33[42m  ");
+                if(i==0 || j==0) getyx(stdscr,y,x);
+                attron(COLOR_PAIR(3));
+                printw("  ");
+                attroff(COLOR_PAIR(3));
             }
             else
             {
-           	        printf("%s", grille->tab[i-1][j-1]);
+                if(strcmp(grille->tab[i-1][j-1],"1") ==0)
+                {
+                    attron(COLOR_PAIR(2));
+                    printw("  ");
+                    attroff(COLOR_PAIR(2));
+                }
+                else if(strcmp(grille->tab[i-1][j-1],"2") ==0)
+                {
+                    attron(COLOR_PAIR(5));
+                    printw("  ");
+                    attroff(COLOR_PAIR(5));
+                }
+           	    else
+                {
+                    attron(COLOR_PAIR(4));
+                    printw("  ");
+                    attroff(COLOR_PAIR(4));
+                }
             }
         }
-        printf("\33[00m  ");
-        printf("\n");
+        printw("\n");
+
     }
-    printf("\n");
+    printw("\n");
 }
 
-
+//rassemble toutes les fonctions pour commencer avec la grille de depart
+void draw_Grille(g* grille, s* serp)
+{
+    Grille_vider(grille);
+    Grille_tirage_fruit(grille);
+    Grille_remplir(grille);
+    Grille_serpent(grille, serp);
+    Grille_redessiner(grille);
+}
