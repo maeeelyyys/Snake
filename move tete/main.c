@@ -2,7 +2,6 @@
 #include <time.h>
 #include <string.h>
 #include "Fonctions_Jeu.h"
-
 int main(int argc, char** argv)
 {      
     // Initialisation de ncurses et du clavier(4 lignes)

@@ -9,11 +9,11 @@ mai* creer_maillon(unsigned x, unsigned y){
     mai *m= malloc(sizeof(mai));
 
     if (m == NULL) {
-        /* Gestion des erreurs d'allocation de mémoire */
-        printf("Erreur : Impossible d'allouer de la mémoire pour le maillon.\n");
+        /* Gestion des erreurs d'allocation de mï¿½moire */
+        printf("Erreur : Impossible d'allouer de la memoire pour le maillon.\n");
         return NULL;
     }
-    /*Les coordonnées de la tête sont dans le premier maillon*/
+    /*Les coordonnï¿½es de la tï¿½te sont dans le premier maillon*/
     m->co[0]=x;
     m->co[1]=y;
     m->suiv=NULL;
@@ -22,15 +22,15 @@ mai* creer_maillon(unsigned x, unsigned y){
 
 sec* creer_section(unsigned x, unsigned y){
     /*Description fonction*/
-    /*On crée le maillon qui servira de tête du serpent*/
+    /*On crï¿½e le maillon qui servira de tï¿½te du serpent*/
     mai *m=creer_maillon(x,y);
 
     /*On initialise le struct section*/
     sec *s=malloc(sizeof(sec));
 
     if (s == NULL) {
-        /* Gestion des erreurs d'allocation de mémoire */
-        printf("Erreur : Impossible d'allouer de la mémoire pour le secteur.\n");
+        /* Gestion des erreurs d'allocation de mï¿½moire */
+        printf("Erreur : Impossible d'allouer de la memoire pour le secteur.\n");
         return NULL;
     }
 
@@ -47,14 +47,14 @@ sec* creer_section(unsigned x, unsigned y){
 
 ls* creer_liste(unsigned x, unsigned y){
     /*Description fonction*/
-    /*On crée la section qui servira de tête du serpent */
+    /*On crï¿½e la section qui servira de tï¿½te du serpent */
     sec *s=creer_section(x,y);
     /*Initialisation du struct liste_section*/
     ls *l=malloc(sizeof(ls));
 
     if (l == NULL) {
-        /* Gestion des erreurs d'allocation de mémoire */
-        printf("Erreur : Impossible d'allouer de la mémoire pour la liste de secteur.\n");
+        /* Gestion des erreurs d'allocation de mï¿½moire */
+        printf("Erreur : Impossible d'allouer de la memoire pour la liste de secteur.\n");
         return NULL;
     }
 
@@ -86,7 +86,7 @@ void desallouer_liste(ls *l){
     l->fin=NULL;
     --l->lg;
 
-    /*On libère la mémoire*/
+    /*On libï¿½re la mï¿½moire*/
     free(l);
 }
 
@@ -117,12 +117,12 @@ void desallouer_section(sec *s){
     s->fin=NULL;
     --s->taille;
 
-    /*On libère la mémoire*/
+    /*On libï¿½re la mï¿½moire*/
     free(s);
 }
 void desallouer_maillon(mai *m){
     if (m == NULL) {
-        return; // Si le maillon est déjà NULL, pas besoin de le libérer.
+        return; // Si le maillon est dï¿½jï¿½ NULL, pas besoin de le libï¿½rer.
     }
 
     /* On vide les champs du maillon*/
@@ -130,7 +130,7 @@ void desallouer_maillon(mai *m){
     m->co[0]=0;
     m->co[1]=0;
 
-    /*On libère la mémoire*/
+    /*On libï¿½re la mï¿½moire*/
     free(m);
 }
 
@@ -179,8 +179,8 @@ void ajouter_maillon_tete(ls *l,unsigned x, unsigned y,int t){
 
 
     mai *m=creer_maillon(x,y);
-    /*Si t est égale à 0, le serpent tourne*/
-    if (t == 0) { // Si t est égal à 0, le serpent tourne donc on crée une section
+    /*Si t est ï¿½gale ï¿½ 0, le serpent tourne*/
+    if (t == 0) { // Si t est ï¿½gal ï¿½ 0, le serpent tourne donc on crï¿½e une section
         sec *s = malloc(sizeof(sec));
         s->taille = 0;
         s->fin = NULL;
@@ -188,7 +188,7 @@ void ajouter_maillon_tete(ls *l,unsigned x, unsigned y,int t){
         s->debut = l->debut->debut;
         l->debut = s;
     }
-    // Ajout du nouveau maillon au début de la liste
+    // Ajout du nouveau maillon au dï¿½but de la liste
     m->suiv = l->debut->debut;
     l->debut->debut = m;
     l->lg++;
@@ -217,7 +217,7 @@ void supprimer_queue(ls *l){
     if(m->suiv==NULL){
         printf("pas de suiv\n");
         desallouer_section(s);
-    //il faut supprimer sur la section précedente le fait qu'il y ait un suivant
+    //il faut supprimer sur la section prï¿½cedente le fait qu'il y ait un suivant
     }else{
         while (m->suiv->suiv!=NULL){
             m=m->suiv;
