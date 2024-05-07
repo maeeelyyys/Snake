@@ -34,7 +34,7 @@ void Grille_desallouer(g* grille);
 
 void Grille_redessiner(g* grille);
 
-void draw_Grille(g* grille, s* serp);
+void draw_Grille(g* grille, s* , int fruit);
 
 void Grille_remplir_serpent(g * grille);
 

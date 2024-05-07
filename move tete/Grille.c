@@ -140,10 +140,13 @@ void Grille_redessiner(g* grille)
 }
 
 //rassemble toutes les fonctions pour commencer avec la grille de depart
-void draw_Grille(g* grille, s* serp)
+void draw_Grille(g* grille, s* serp, int fruit)
 {
     Grille_vider(grille);
-    Grille_tirage_fruit(grille);
+    if(fruit == 1)
+    {
+        Grille_tirage_fruit(grille);
+    }
     Grille_remplir(grille);
     Grille_serpent(grille, serp);
     Grille_redessiner(grille);

@@ -6,3 +6,4 @@
 
 void getMenu();
 void move_serpent(g* grille);
+void endscreen_loose();
