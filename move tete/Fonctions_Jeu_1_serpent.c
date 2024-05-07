@@ -27,37 +27,41 @@ void move_serpent(g* grille)
         switch (ch)
         {
         case 'w':
-            serpent->tete[0] -= 1;
-            if(serpent->tete[0]==-1)
+            if(serpent->tete[0] <= 0)
             {
                 endscreen_loose();
+                return;
             }
+            else serpent->tete[0] -= 1;
+
             break;
         case 'a':
-            serpent->tete[1] -= 1;
-            if(serpent->tete[1]==-1)
+            if(serpent->tete[1] <= 0)
             {
-                endscreen_loose();
+               endscreen_loose();
+               return;
             }
+            else serpent->tete[1] -= 1;
             break;
         case 's':
-            serpent->tete[0] += 1;
-            if(serpent->tete[0]== grille->n)
+            if(serpent->tete[0] >= grille->n-1)
             {
-                endscreen_loose();
+               endscreen_loose();
+               return;
             }
+            else serpent->tete[0] += 1;
             break;
         case 'd':
-            serpent->tete[1] += 1;
-            if(serpent->tete[1]==grille->)
+            if(serpent->tete[1] >= grille->m-1)
             {
-                endscreen_loose();
+               endscreen_loose();
+               return;
             }
+            else serpent->tete[1] += 1;
             break;
         }
         clear();
         refresh();
-        //free la grille
         draw_Grille(grille, serpent,0);
 
     }
@@ -69,5 +73,4 @@ void endscreen_loose()
     clear();
     refresh();
     printw("fdsfdf");
-    e
 }
