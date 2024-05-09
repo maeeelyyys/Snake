@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include "Fonctions_Jeu.h"
+#include "Fonction_l.c"
 
 void getMenu()
 {
@@ -17,8 +18,10 @@ void move_serpent(g* grille)
 {
     int ch=0;
     s * serpent = malloc(sizeof(s));
-    serpent->tete[0] = (grille->n)-1;
-    serpent->tete[1] = 0;
+    serpent->tete[0] = 0;
+    serpent->tete[1] = (grille->n)-1;
+    //serpent->l = creer_liste(serpent->tete[0],serpent->tete[1]);
+    //ajouter_maillon_tete(serpent->l,serpent->tete[0],serpent->tete[1]);
     draw_Grille(grille, serpent, 1);
     while (ch!=' ')
     {
@@ -32,6 +35,7 @@ void move_serpent(g* grille)
                 endscreen_loose();
                 return;
             }
+            //if(grille->tab[serpent->tete[0]][serpent->tete[1]])
             else serpent->tete[0] -= 1;
 
             break;
@@ -44,7 +48,7 @@ void move_serpent(g* grille)
             else serpent->tete[1] -= 1;
             break;
         case 's':
-            if(serpent->tete[0] >= grille->n-1)
+            if(serpent->tete[0] >= (grille->n)-1)
             {
                endscreen_loose();
                return;

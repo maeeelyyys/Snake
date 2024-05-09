@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <ncurses.h>
 #include "Fonctions_Jeu.h"
 int main(int argc, char** argv)
 {      
