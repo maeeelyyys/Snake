@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include "Grille.h"
-
+#include "Fonction_l.h"
 
 g * Grille_allouer(int n, int m)
 {
@@ -75,9 +75,16 @@ void Grille_remplir(g* grille)
 
 void Grille_serpent(g* grille, s* serp)
 {
-    int x = serp->tete[0];
-    int y = serp->tete[1];
-    grille->tab[x][y] = "2";
+    //mai* tmp= serp->l->debut->debut;
+    //while (tmp->suiv != NULL)
+    //{
+          //int x = tmp->co[0];
+          //int y = tmp->co[1];
+          grille->tab[serp->tete[0]][serp->tete[1]] = "2";
+          //tmp = tmp->suiv;
+    //}
+
+    
 }
 
 void Grille_redessiner(g* grille)

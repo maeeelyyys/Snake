@@ -2,10 +2,15 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
-#include "Liste_section.h"
+#include "Fonction_l.h"
+
+#ifndef SERPENT_H_
+#define SERPENT_H_
 
 typedef struct Serpent
 {
     int tete[2];
-    ls * sections;
+    ls * l;
 }s;
+
+#endif
