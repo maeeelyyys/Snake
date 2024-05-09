@@ -18,50 +18,75 @@ void move_serpent(g* grille)
 {
     int ch=0;
     s * serpent = malloc(sizeof(s));
-    serpent->tete[0] = 0;
-    serpent->tete[1] = (grille->n)-1;
+    serpent->tete[0] = (grille->m)-1;
+    serpent->tete[1] = 0;
     //serpent->l = creer_liste(serpent->tete[0],serpent->tete[1]);
     //ajouter_maillon_tete(serpent->l,serpent->tete[0],serpent->tete[1]);
+
+    char direction = 'd';
     draw_Grille(grille, serpent, 1);
     while (ch!=' ')
     {
         ch = getch();
-        
-        switch (ch)
-        {
-        case 'w':
-            if(serpent->tete[0] <= 0)
+        if (ch != ERR) {
+            switch (ch)
             {
-                endscreen_loose();
-                return;
+                case 'w':
+                    if (direction != 's')
+                        direction = 'w';
+                    break;
+                case 'a':
+                    if (direction != 'd')
+                        direction = 'a';
+                    break;
+                case 's':
+                    if (direction != 'w')
+                        direction = 's';
+                    break;
+                case 'd':
+                    if (direction != 'a')
+                        direction = 'd';
+                    break;
             }
-            else serpent->tete[0] -= 1;
-            break;
-        case 'a':
-            if(serpent->tete[1] <= 0)
-            {
-               endscreen_loose();
-               return;
-            }
-            else serpent->tete[1] -= 1;
-            break;
-        case 's':
-            if(serpent->tete[0] >= (grille->n)-1)
-            {
-               endscreen_loose();
-               return;
-            }
-            else serpent->tete[0] += 1;
-            break;
-        case 'd':
-            if(serpent->tete[1] >= grille->m-1)
-            {
-               endscreen_loose();
-               return;
-            }
-            else serpent->tete[1] += 1;
-            break;
         }
+        else {
+            switch (direction)
+            {
+                case 'w':
+                    if (serpent->tete[0] > 0)
+                        serpent->tete[0] -= 1;
+                    else {
+                        endscreen_loose();
+                        return;
+                    }
+                    break;
+                case 'a':
+                    if (serpent->tete[1] > 0)
+                        serpent->tete[1] -= 1;
+                    else {
+                        endscreen_loose();
+                        return;
+                    }
+                    break;
+                case 's':
+                    if (serpent->tete[0] < (grille->n) - 1)
+                        serpent->tete[0] += 1;
+                    else {
+                        endscreen_loose();
+                        return;
+                    }
+                    break;
+                case 'd':
+                    if (serpent->tete[1] < grille->m - 1)
+                        serpent->tete[1] += 1;
+                    else {
+                        endscreen_loose();
+                        return;
+                    }
+                    break;
+            }
+        }
+        
         if (atefruit(grille, serpent) == 1) {
             endscreen_loose();
             refresh();
@@ -69,9 +94,9 @@ void move_serpent(g* grille)
         
         clear();
         refresh();
-        draw_Grille(grille, serpent,0);
-
+        draw_Grille(grille, serpent, 0);
     }
+        
     free(serpent);
 }
 
