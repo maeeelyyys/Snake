@@ -35,9 +35,7 @@ void move_serpent(g* grille)
                 endscreen_loose();
                 return;
             }
-            //if(grille->tab[serpent->tete[0]][serpent->tete[1]])
             else serpent->tete[0] -= 1;
-
             break;
         case 'a':
             if(serpent->tete[1] <= 0)
@@ -64,6 +62,11 @@ void move_serpent(g* grille)
             else serpent->tete[1] += 1;
             break;
         }
+        if (atefruit(grille, serpent) == 1) {
+            endscreen_loose();
+            refresh();
+        }
+        
         clear();
         refresh();
         draw_Grille(grille, serpent,0);
@@ -77,4 +80,12 @@ void endscreen_loose()
     clear();
     refresh();
     printw("fdsfdf");
+}
+
+int atefruit(g* grille, s * serp){
+  if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
+    Grille_tirage_fruit(grille);
+    return 1;     
+  }
+  return 0;
 }

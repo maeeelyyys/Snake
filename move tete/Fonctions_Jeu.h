@@ -7,3 +7,4 @@
 void getMenu();
 void move_serpent(g* grille);
 void endscreen_loose();
+int atefruit(g* grille, s* serp);
