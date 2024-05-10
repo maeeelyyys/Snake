@@ -20,6 +20,7 @@ void move_serpent(g* grille)
     s * serpent = malloc(sizeof(s));
     serpent->tete[0] = (grille->m)-1;
     serpent->tete[1] = 0;
+    serpent->fruits =0;
     //serpent->l = creer_liste(serpent->tete[0],serpent->tete[1]);
     //ajouter_maillon_tete(serpent->l,serpent->tete[0],serpent->tete[1]);
 
@@ -88,6 +89,7 @@ void move_serpent(g* grille)
         }
         
         if (atefruit(grille, serpent) == 1) {
+            serpent->fruits+=1;
             endscreen_loose();
             refresh();
         }
