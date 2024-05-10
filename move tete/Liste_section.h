@@ -3,56 +3,54 @@
 #include <time.h>
 #include <string.h>
 
-#ifndef LISTE_SECTION_H_
-#define LISTE_SECTION_H_
+#ifndef _LISTE_SECTION_H
+#define _LISTE_SECTION_H
 
 
-typedef struct maillon{
-    struct maillon *suiv;
-    int co[2];
-}mai;
-
-typedef struct section{
-    int taille;
-    char *couleur;
-    struct section *suiv;
-    struct maillon *debut;
-    struct maillon *fin;
+typedef struct section {
+  int  taille; /* valeur du maillon */
+  struct section *suiv; /* adresse du maillon suivant */
 }sec;
 
-typedef struct ListeSection{
-    int lg;
-    struct section *debut;
-    struct section *fin;
+typedef struct liste_structure {
+  struct section *premier; /* adresse du premier maillon de la liste, NULL si la liste est vide */
+  struct section *dernier; /* adresse du dernier maillon de la liste NULL si la liste est vide */
+  int lg; /* nombre de section dans la liste */
 }ls;
 
+/* allocation sur le tas pour un maillon de valeur v */
+/* et renvoi de l'adresse du maillon */
+sec* creer_section (unsigned t);
 
-sec* creer_section(unsigned x, unsigned y);//ok
+/* allocation sur le tas pour une liste vide */
+/* et renvoi de l'adresse de la liste */
+ls* creer_liste();
 
-mai* creer_maillon(unsigned x, unsigned y);//ok
+/* libération de l'espace mémoire occupé par la liste */
+void desallouer_liste (ls **l);
 
-ls* creer_liste(unsigned x, unsigned y); //Ok
+/* libération de l'espace mémoire occupé par la section */
+void desallouer_section (sec **s);
 
-void desallouer_maillon(mai *m);//ok
+/* test de la vacuité de la liste d'adresse l */
+int est_vide_liste(const ls *l);
 
-void desallouer_section(sec *);//ok
+/* affichage des valeurs de la liste d'adresse l */
+void afficher_ls(const ls *l);
 
-void desallouer_liste(ls *l);//ok
+/* insertion du section d'adresse m au début de la liste d'adresse l */
+void ajouter_sec_debut(ls *l, sec *s);
 
+/* insertion d'un maillon d'adresse m à la fin de la liste d'adresse l */
+void ajouter_sec_fin(ls *l, sec *s);
 
-mai* acceder_pos_liste(ls *l, unsigned pos); //normalement ok (fonction du cours)
+/* extraction du premier maillon de la liste d'adresse l */
+/* et renvoi de l'adresse du maillon extrait */
+sec *extraire_tete(ls *l);
 
-
-void ajouter_section_queue(ls *l, mai *m);//mais pourquoi j'ai fais cette fonction
-
-void ajouter_maillon_tete(ls *l,unsigned x, unsigned y,int t); //ok
-
-
-
-void afficher_ls(ls *l);//ok
-
-
-void supprimer_queue(ls *l);//en cours de traitement
+/* extraction du dernier maillon de la liste d'adresse l */
+/* et renvoi de l'adresse du maillon extrait */
+sec *extraire_queue(ls *l);
 
 
 #endif

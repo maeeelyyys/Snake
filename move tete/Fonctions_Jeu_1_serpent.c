@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ncurses.h>
 #include "Fonctions_Jeu.h"
-#include "Fonction_l.c"
 
 void getMenu()
 {

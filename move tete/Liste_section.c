@@ -2,53 +2,27 @@
 
 
 
-mai* creer_maillon(unsigned x, unsigned y){
+sec* creer_section(unsigned t){
     /*Description fonction*/
 
     /*Initialisation du struct maillon*/
-    mai *m= malloc(sizeof(mai));
+    sec *s= malloc(sizeof(sec));
 
-    if (m == NULL) {
+    if (s == NULL) {
         /* Gestion des erreurs d'allocation de m�moire */
         printf("Erreur : Impossible d'allouer de la memoire pour le maillon.\n");
         return NULL;
     }
-    /*Les coordonn�es de la t�te sont dans le premier maillon*/
-    m->co[0]=x;
-    m->co[1]=y;
-    m->suiv=NULL;
-    return m;
-}
-
-sec* creer_section(unsigned x, unsigned y){
-    /*Description fonction*/
-    /*On cr�e le maillon qui servira de t�te du serpent*/
-    mai *m=creer_maillon(x,y);
-
-    /*On initialise le struct section*/
-    sec *s=malloc(sizeof(sec));
-
-    if (s == NULL) {
-        /* Gestion des erreurs d'allocation de m�moire */
-        printf("Erreur : Impossible d'allouer de la memoire pour le secteur.\n");
-        return NULL;
-    }
-
-    s->taille=1;
-    s->debut=m;
+    /*La taille de la section*/
+    s->taille=t;
     s->suiv=NULL;
-    s->fin=m;
-
-    s->couleur=malloc(sizeof(char)*8);
-    s->couleur="\33[00m";//On initialise la couleur noir de base
-
     return s;
 }
 
-ls* creer_liste(unsigned x, unsigned y){
+
+ls* creer_liste(){
     /*Description fonction*/
-    /*On cr�e la section qui servira de t�te du serpent */
-    sec *s=creer_section(x,y);
+
     /*Initialisation du struct liste_section*/
     ls *l=malloc(sizeof(ls));
 
@@ -58,193 +32,138 @@ ls* creer_liste(unsigned x, unsigned y){
         return NULL;
     }
 
+    l->premier=creer_section(1);
+    l->dernier=l->premier;
     l->lg=1;
-    l->debut=s;
-    l->fin=s;
     return l;
 }
 
 
-void desallouer_liste(ls *l){
+void desallouer_liste(ls **l){
     /*Description fonction*/
     /*on initialise les variables*/
 
-    sec *s=l->debut;
+    sec *s=(*l)->premier;
     sec *s2=malloc(sizeof(sec));
 
     /*On parcours les sections en les vidant */
     while (s->suiv!=NULL){
         s2=s;
         s=s->suiv;
-        desallouer_section(s2);
-        --l->lg;
+        desallouer_section(&s2);
+        --(*l)->lg;
     }
     /*Si il n'y a pas de suivant c'est donc la premiere section*/
-    desallouer_section(s);
+    desallouer_section(&s);
     /*on vide le struct*/
-    l->debut=NULL;
-    l->fin=NULL;
-    --l->lg;
+    (*l)->premier=NULL;
+    (*l)->dernier=NULL;
+    --(*l)->lg;
 
     /*On lib�re la m�moire*/
-    free(l);
+    free(*l);
 }
 
 
 
 
-void desallouer_section(sec *s){
+void desallouer_section(sec **s){
     /*Description fonction*/
-    /*on initialise les variables*/
-
-    mai *m=s->debut;
-    mai *m2;
-
-    /*On parcours les maillons en les vidant */
-    while (m->suiv!=NULL){
-        m2=m;
-        m=m->suiv;
-        desallouer_maillon(m2);
-        --s->taille;
-    }
-
-    /*Si il n'y a pas de suivant c'est donc la premiere section*/
-    desallouer_maillon(m);
 
     /*on vide les champs du struct*/
-    free(s->couleur);
-    s->debut=NULL;
-    s->fin=NULL;
-    --s->taille;
+    (*s)->suiv=NULL;
 
     /*On lib�re la m�moire*/
-    free(s);
+    free(*s);
 }
-void desallouer_maillon(mai *m){
-    if (m == NULL) {
-        return; // Si le maillon est d�j� NULL, pas besoin de le lib�rer.
+
+int est_vide_liste(const ls *l){
+    if(l->premier==NULL || l->lg==0){
+        printf("La liste est vide\n");
+        return 1;
     }
-
-    /* On vide les champs du maillon*/
-    m->suiv=NULL;
-    m->co[0]=0;
-    m->co[1]=0;
-
-    /*On lib�re la m�moire*/
-    free(m);
+    return 0;
 }
 
 
-
-mai* acceder_pos_liste(ls *l, unsigned pos){
+sec* acceder_pos_liste(ls *l, unsigned pos){
     /*Description fonction*/
-    mai *m = l->debut->debut;
+    sec *s = l->premier;
 
-    while (m != NULL && pos > 0) {
-        m = m->suiv;
+    while (s != NULL && pos > 0) {
+        s = s->suiv;
         pos--;
     }
 
-    return m;
+    return s;
 }
 
-void ajouter_section_queue(ls *l, mai *m){
-    /*Description fonction*/
-
-    mai *tmp=malloc(sizeof(mai));
-
-    tmp=acceder_pos_liste(l,l->lg-1);
-    tmp->suiv=m;
+void ajouter_sec_fin(ls *l, sec *s){
+    /*Description fonction*/    
     ++l->lg;
-
-    sec *s=malloc(sizeof(sec));
-    s=l->debut;
-
-    while(s->suiv!=NULL){
-        s = s->suiv;
-    }
-
-    ++s->taille;
-    s->fin=m;
-
-    free(s);
-    free(tmp);
+    l->dernier->suiv=s;
+    l->dernier=s;   
 }
 
 
 
 
-void ajouter_maillon_tete(ls *l,unsigned x, unsigned y,int t){
+void ajouter_sec_debut(ls *l,sec *s){
     /*Description fonction*/
 
+    s->suiv=l->premier;
+    l->premier=s;
+    ++l->lg;
+}
 
-    mai *m=creer_maillon(x,y);
-    /*Si t est �gale � 0, le serpent tourne*/
-    if (t == 0) { // Si t est �gal � 0, le serpent tourne donc on cr�e une section
-        sec *s = malloc(sizeof(sec));
-        s->taille = 0;
-        s->fin = NULL;
-        s->suiv = l->debut;
-        s->debut = l->debut->debut;
-        l->debut = s;
+sec* extraire_queue (ls *l){
+    /*Description fonction*/
+
+    if(l->premier==NULL || l==NULL){
+        return NULL;
     }
-    // Ajout du nouveau maillon au d�but de la liste
-    m->suiv = l->debut->debut;
-    l->debut->debut = m;
-    l->lg++;
-    l->debut->taille++;
 
+    sec *tmp=l->premier;
+    sec *ex=tmp;
 
+    if(tmp->suiv==NULL){
+        printf("Perdu");
+        l->premier=NULL;
+        ex=tmp;
+    }else{
+        while(tmp->suiv->suiv!=NULL){
+            tmp = tmp->suiv;
+        }
+        l->dernier=tmp;
+        ex=tmp->suiv;
+        tmp->suiv=NULL;
+    }
+    --l->lg;
 
+    return ex;
 }
 
 
-void supprimer_queue(ls *l){
-    /*Description fonction*/
 
-    if(l->debut==NULL){
+void afficher_ls(const ls *l){
+    /*Description fonction*/
+    if(l->premier==NULL){
+        printf("La liste est vide\n");
+        return ;
+    }else if(l->premier->suiv==NULL){
+        printf("Il n'y a qu'une section de taille %d\n",l->premier->taille);
         return;
     }
 
-    sec *s=l->debut;
-
-    while(s->suiv!=NULL){
-        s = s->suiv;
-    }
-
-    mai *m=s->debut;
-
-    if(m->suiv==NULL){
-        printf("pas de suiv\n");
-        desallouer_section(s);
-    //il faut supprimer sur la section pr�cedente le fait qu'il y ait un suivant
-    }else{
-        while (m->suiv->suiv!=NULL){
-            m=m->suiv;
-        }
-        m->suiv=NULL;
-    }
-
-    --l->lg;
-}
-
-void afficher_ls(ls *l){
-    /*Description fonction*/
-    sec* s=l->debut;
-    mai *m=l->debut->debut;
-    int i=0,j=0;
-    while(m!=NULL){
-        j++;
-        m=m->suiv;
-    }
+    sec* s=l->premier;
+    int i=1;
+    printf("Il y a %d sections\n",l->lg);
     while(s!=NULL){
-        i++;
+        printf("La section n°%d est de taille %d\n",i,s->taille);
+        i++;       
         s=s->suiv;
+        printf(" TOUR \n");
     }
-
-    printf("il y a %d maillons\n",j);
-    printf("Il y a %d sections\n",i);
-    printf("la taille de la liste est de :%d\n",l->lg);
 
 }
 

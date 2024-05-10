@@ -1,7 +1,7 @@
 all: Grille.o main.o Fonctions_Jeu_1_serpent.o Serpent.o
 	gcc -Wall Grille.o Fonctions_Jeu_1_serpent.o Serpent.o main.o -o programme -lncurses
 
-Fonction_l.o:  Fonction_l.c Fonction_l.h
+Liste_section.o:  Liste_section.c Liste_section.h
 	gcc -c -Wall -std=c99 -Wfatal-errors Liste_section.c
 
 Serpent.o:  Serpent.c Serpent.h Liste_section.h
