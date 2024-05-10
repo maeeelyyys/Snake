@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
-#include "Fonction_l.h"
+#include "Liste_section.h"
 
 #ifndef SERPENT_H_
 #define SERPENT_H_

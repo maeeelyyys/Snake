@@ -3,8 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include <ncurses.h>
-#include "Grille.h"
-#include "Fonction_l.h"
+#include "Fonctions_Jeu.h"
 
 g * Grille_allouer(int n, int m)
 {
