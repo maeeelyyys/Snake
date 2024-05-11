@@ -89,12 +89,11 @@ void move_serpent(g* grille)
                     break;
             }
         }
-        
+
+        ajouter_mvt_fin(serpent->mov, creer_mouvement(serpent->tete[0], serpent->tete[1], direction));
+
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
-            ajouter_sec_fin(serp->l, creer_section(1));
-            //ajouter_mvt_fin(serpent->mouvements, creer_mouvement(serpent->tete[0], serpent->tete[1], direction));
-
         }
         
         clear();
@@ -115,7 +114,7 @@ void endscreen_loose(s* serpent)
 
 int atefruit(g* grille, s * serp){
   if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
-      
+      ajouter_sec_fin(serp->l, creer_section(1));
       return 1;     
   }
   return 0;

@@ -38,7 +38,7 @@ lsm* creer_liste_mouvement();
 
 void desallouer_mouvement(lm **m);
 
-void desallouer_liste_mouvement(lsm **lm);
+void desallouer_liste_mouvement(lsm **toto);
 
 void ajouter_mvt_fin(lsm *lsm, lm *m);
 

@@ -43,10 +43,10 @@ void desallouer_mouvement(lm **m) {
     }
 }
 
-void desallouer_liste_mouvement(lsm **lm) {
-    if (*lm != NULL) {
+void desallouer_liste_mouvement(lsm **toto) {
+    if (*toto != NULL) {
         // Initialisation des variables
-        lm *current = (*lm)->premier;
+        lm *current = (*toto)->premier;
         lm *temp;
 
         // Parcours de la liste de mouvements
@@ -54,23 +54,22 @@ void desallouer_liste_mouvement(lsm **lm) {
             temp = current;
             current = current->suiv;
             // Désallocation du mouvement courant
-            desallouer_mouvement(&temp->m);
+            desallouer_mouvement(&temp);
             // Décrémentation du nombre de mouvements dans la liste
-            --(*lm)->lg;
+            --(*toto)->lg;
             // Libération de la mémoire pour le maillon courant de la liste de mouvements
             free(temp);
         }
 
         // Réinitialisation de la liste de mouvements
-        (*lm)->premier = NULL;
-        (*lm)->dernier = NULL;
-        --(*lm)->lg;
+        (*toto)->premier = NULL;
+        (*toto)->dernier = NULL;
+        --(*toto)->lg;
         // Libération de la mémoire pour la structure de liste de mouvements elle-même
-        free(*lm);
-        *lm = NULL;
+        free(*toto);
+        *toto = NULL;
     }
 }
-
 // Ajoute un mouvement à la fin de la liste de mouvements
 void ajouter_mvt_fin(lsm *lsm, lm *m) {
     if (lsm != NULL && m != NULL) {
