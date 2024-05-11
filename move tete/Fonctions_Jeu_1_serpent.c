@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include "Fonctions_Jeu.h"
+#include "Grille.h"
 
 void getMenu()
 {
@@ -20,9 +21,8 @@ void move_serpent(g* grille)
     serpent->tete[0] = (grille->m)-1;
     serpent->tete[1] = 0;
     serpent->fruits =0;
-    //serpent->l = creer_liste(serpent->tete[0],serpent->tete[1]);
-    //ajouter_maillon_tete(serpent->l,serpent->tete[0],serpent->tete[1]);
-
+    serpent->l = creer_liste();
+    //serpent->lm = creer_liste_mouvement();
     char direction = 'd';
     draw_Grille(grille, serpent, 1);
     while (ch!=' ')
@@ -32,19 +32,22 @@ void move_serpent(g* grille)
             switch (ch)
             {
                 case 'w':
-                    if (direction != 's')
+                case 'z':
+                case KEY_UP:
+                    
                         direction = 'w';
                     break;
                 case 'a':
-                    if (direction != 'd')
+                case 'q':
+                case KEY_LEFT:
                         direction = 'a';
                     break;
                 case 's':
-                    if (direction != 'w')
+                case KEY_DOWN:
                         direction = 's';
                     break;
                 case 'd':
-                    if (direction != 'a')
+                case KEY_RIGHT:
                         direction = 'd';
                     break;
             }
@@ -56,7 +59,7 @@ void move_serpent(g* grille)
                     if (serpent->tete[0] > 0)
                         serpent->tete[0] -= 1;
                     else {
-                        endscreen_loose();
+                        endscreen_loose(serpent);
                         return;
                     }
                     break;
@@ -64,7 +67,7 @@ void move_serpent(g* grille)
                     if (serpent->tete[1] > 0)
                         serpent->tete[1] -= 1;
                     else {
-                        endscreen_loose();
+                        endscreen_loose(serpent);
                         return;
                     }
                     break;
@@ -72,7 +75,7 @@ void move_serpent(g* grille)
                     if (serpent->tete[0] < (grille->n) - 1)
                         serpent->tete[0] += 1;
                     else {
-                        endscreen_loose();
+                        endscreen_loose(serpent);
                         return;
                     }
                     break;
@@ -80,7 +83,7 @@ void move_serpent(g* grille)
                     if (serpent->tete[1] < grille->m - 1)
                         serpent->tete[1] += 1;
                     else {
-                        endscreen_loose();
+                        endscreen_loose(serpent);
                         return;
                     }
                     break;
@@ -89,29 +92,31 @@ void move_serpent(g* grille)
         
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
-            endscreen_loose();
-            refresh();
+            ajouter_sec_fin(serp->l, creer_section(1));
+            //ajouter_mvt_fin(serpent->mouvements, creer_mouvement(serpent->tete[0], serpent->tete[1], direction));
+
         }
         
         clear();
         refresh();
-        draw_Grille(grille, serpent, 0);
+        draw_Grille(grille, serpent, atefruit(grille, serpent));
     }
         
     free(serpent);
 }
 
-void endscreen_loose()
+void endscreen_loose(s* serpent)
 {
     clear();
     refresh();
     printw("fdsfdf");
+    printw("%d", serpent->l->lg);
 }
 
 int atefruit(g* grille, s * serp){
   if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
-    Grille_tirage_fruit(grille);
-    return 1;     
+      
+      return 1;     
   }
   return 0;
 }

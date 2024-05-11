@@ -24,16 +24,18 @@ int main(int argc, char** argv)
     afficher_ls(l);
     printf("----------------------\n");
 
-    sec *u=extraire_queue(l);
+    //sec *u=extraire_queue(l);
 
+    sec *w=creer_section(1);
+    ajouter_sec_fin(l,w);
     afficher_ls(l);
     printf("----------------------\n");
 
-    desallouer_section(&u);
+    //desallouer_section(&u);
     desallouer_liste(&l);
 
 
-    /*
+    //
     // Initialisation de ncurses et du clavier(4 lignes)
 	initscr();
     raw();
@@ -93,5 +95,5 @@ int main(int argc, char** argv)
     //fin de ncurses 
     endwin();
     return 0;
-    */
+    
 }

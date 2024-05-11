@@ -74,16 +74,17 @@ void Grille_remplir(g* grille)
 
 void Grille_serpent(g* grille, s* serp)
 {
-    //mai* tmp= serp->l->debut->debut;
-    //while (tmp->suiv != NULL)
-    //{
-          //int x = tmp->co[0];
-          //int y = tmp->co[1];
-          grille->tab[serp->tete[0]][serp->tete[1]] = "2";
-          //tmp = tmp->suiv;
-    //}
-
-    
+    grille->tab[serp->tete[0]][serp->tete[1]] = "2";
+    /*if(serp->l->lg>=2){
+        for(int i=1; i<serp->l->lg; i++){
+                grille->tab[serp->tete[0]-i][serp->tete[1]] = "2";   
+        }
+    }*/
+    lm* current_mvt = serp->mov->premier;
+    while (current_mvt != NULL) {
+        grille->tab[current_mvt->coord[0]][current_mvt->coord[1]] = "2";
+        current_mvt = current_mvt->suiv;
+    }
 }
 
 void Grille_redessiner(g* grille)

@@ -1,5 +1,92 @@
 #include "Liste_section.h"
 
+// Crée un mouvement avec les coordonnées (x, y) et la direction spécifiée
+lm* creer_mouvement(int x, int y, enum dir direction) {
+    // Allocation de mémoire pour le mouvement
+    lm* m = malloc(sizeof(lm));
+    if (m == NULL) {
+        printf("Erreur : Impossible d'allouer de la mémoire pour le mouvement.\n");
+        return NULL;
+    }
+
+    // Initialisation des champs du mouvement
+    m->coord[0] = x;
+    m->coord[1] = y;
+    m->direction = direction;
+    m->suiv = NULL;
+
+    return m;
+}
+
+// Crée une liste de mouvements vide
+lsm* creer_liste_mouvement() {
+    // Allocation de mémoire pour la liste de mouvements
+    lsm* lm = malloc(sizeof(lsm));
+    if (lm == NULL) {
+        printf("Erreur : Impossible d'allouer de la mémoire pour la liste de mouvements.\n");
+        return NULL;
+    }
+
+    // Initialisation des champs de la liste de mouvements
+    lm->premier = NULL;
+    lm->dernier = NULL;
+    lm->lg = 0;
+
+    return lm;
+}
+
+void desallouer_mouvement(lm **m) {
+    if (*m != NULL) {
+        // Libération de la mémoire pour le mouvement
+        free(*m);
+        *m = NULL;
+    }
+}
+
+void desallouer_liste_mouvement(lsm **lm) {
+    if (*lm != NULL) {
+        // Initialisation des variables
+        lm *current = (*lm)->premier;
+        lm *temp;
+
+        // Parcours de la liste de mouvements
+        while (current->suiv != NULL) {
+            temp = current;
+            current = current->suiv;
+            // Désallocation du mouvement courant
+            desallouer_mouvement(&temp->m);
+            // Décrémentation du nombre de mouvements dans la liste
+            --(*lm)->lg;
+            // Libération de la mémoire pour le maillon courant de la liste de mouvements
+            free(temp);
+        }
+
+        // Réinitialisation de la liste de mouvements
+        (*lm)->premier = NULL;
+        (*lm)->dernier = NULL;
+        --(*lm)->lg;
+        // Libération de la mémoire pour la structure de liste de mouvements elle-même
+        free(*lm);
+        *lm = NULL;
+    }
+}
+
+// Ajoute un mouvement à la fin de la liste de mouvements
+void ajouter_mvt_fin(lsm *lsm, lm *m) {
+    if (lsm != NULL && m != NULL) {
+        if (lsm->premier == NULL) {
+            // Si la liste est vide, le premier mouvement devient le nouveau mouvement
+            lsm->premier = m;
+        } else {
+            // Sinon, le mouvement est ajouté après le dernier mouvement existant
+            lsm->dernier->suiv = m;
+        }
+        // Le dernier mouvement devient le nouveau mouvement
+        lsm->dernier = m;
+        // Incrémentation du nombre de mouvements dans la liste
+        lsm->lg++;
+    }
+}
 
 
 sec* creer_section(unsigned t){
