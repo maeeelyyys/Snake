@@ -34,6 +34,8 @@ void move_serpent(g* grille)
     serpent->mov = creer_liste_mouvement();
     char direction = 'd';
     draw_Grille(grille, serpent, 1);
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+    wbkgd(stdscr, COLOR_PAIR(1));
     while (ch!='q')
     {
         ch = getch();
@@ -110,6 +112,7 @@ void move_serpent(g* grille)
         clear();
         refresh();
         draw_Grille(grille, serpent, atefruit(grille, serpent));
+        
     }
         
     free(serpent);
