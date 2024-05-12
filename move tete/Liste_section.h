@@ -22,6 +22,7 @@ typedef struct liste_mouvement_structure {
 
 typedef struct section {
   int  taille; /* valeur du maillon */
+  int coord[2];
   struct section *suiv; /* adresse du maillon suivant */
 }sec;
 
@@ -44,11 +45,11 @@ void ajouter_mvt_fin(lsm *lsm, lm *m);
 
 /* allocation sur le tas pour un maillon de valeur v */
 /* et renvoi de l'adresse du maillon */
-sec* creer_section (unsigned t);
+sec* creer_section (unsigned t, int x, int y);
 
 /* allocation sur le tas pour une liste vide */
 /* et renvoi de l'adresse de la liste */
-ls* creer_liste();
+ls* creer_liste(int x, int y);
 
 /* libération de l'espace mémoire occupé par la liste */
 void desallouer_liste (ls **l);

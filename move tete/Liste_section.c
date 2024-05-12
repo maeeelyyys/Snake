@@ -88,7 +88,7 @@ void ajouter_mvt_fin(lsm *lsm, lm *m) {
 }
 
 
-sec* creer_section(unsigned t){
+sec* creer_section(unsigned t, int x, int y){
     /*Description fonction*/
 
     /*Initialisation du struct maillon*/
@@ -101,12 +101,14 @@ sec* creer_section(unsigned t){
     }
     /*La taille de la section*/
     s->taille=t;
+    s->coord[0] = y;
+    s->coord[1] = x;
     s->suiv=NULL;
     return s;
 }
 
 
-ls* creer_liste(){
+ls* creer_liste(int x, int y){
     /*Description fonction*/
 
     /*Initialisation du struct liste_section*/
@@ -118,7 +120,7 @@ ls* creer_liste(){
         return NULL;
     }
 
-    l->premier=creer_section(1);
+    l->premier=creer_section(1,x,y);
     l->dernier=l->premier;
     l->lg=1;
     return l;

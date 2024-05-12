@@ -11,7 +11,6 @@ typedef struct Serpent
 {
     int tete[2];
     ls * l;
-    lsm * mov;
     int fruits;
 }s;
 

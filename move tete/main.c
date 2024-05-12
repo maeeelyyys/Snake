@@ -7,33 +7,6 @@
 
 int main(int argc, char** argv)
 {   
-    ls *l=creer_liste();
-    printf("----------------------\n");
-
-    afficher_ls(l);
-
-    sec *s=creer_section(2);
-    ajouter_sec_fin(l,s);
-    printf("----------------------\n");
-    afficher_ls(l);
-
-
-    printf("----------------------\n");
-    sec *p=creer_section(3);
-    ajouter_sec_debut(l,p);
-    afficher_ls(l);
-    printf("----------------------\n");
-
-    //sec *u=extraire_queue(l);
-
-    sec *w=creer_section(1);
-    ajouter_sec_fin(l,w);
-    afficher_ls(l);
-    printf("----------------------\n");
-
-    //desallouer_section(&u);
-    desallouer_liste(&l);
-
     fprintf(stdout, "\x1B[5mRELANCEZ LE JEU ! \x1B[0m\n");
     //
     // Initialisation de ncurses et du clavier(4 lignes)
