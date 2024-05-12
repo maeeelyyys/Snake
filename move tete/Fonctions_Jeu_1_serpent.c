@@ -7,11 +7,20 @@
 
 void getMenu()
 {
-    char* message = "JEU SNAKE";
+    char* title = "JEU SNAKE";
+    char* message = "ENTREZ SPACE TO START";
+    char* message1 = "ENTREZ Q POUR QUITTER";
     int max_y = getmaxy(stdscr)/2;
-    int max_x = getmaxx(stdscr)/2 - strlen(message)/2;
+    int max_x = getmaxx(stdscr)/2 - strlen(title)/2;
     move(max_y, max_x);
-    printw("%s", message);
+    attron(A_BOLD);
+    printw(title);
+    attroff(A_BOLD);
+    move(max_y + 9, getmaxx(stdscr)/2 - strlen(message)/2);
+    printw(message);
+    move(max_y + 12, getmaxx(stdscr)/2 - strlen(message1)/2);
+    printw(message1);
+        
 }
 
 void move_serpent(g* grille)
@@ -22,10 +31,10 @@ void move_serpent(g* grille)
     serpent->tete[1] = 0;
     serpent->fruits =0;
     serpent->l = creer_liste();
-    //serpent->lm = creer_liste_mouvement();
+    serpent->mov = creer_liste_mouvement();
     char direction = 'd';
     draw_Grille(grille, serpent, 1);
-    while (ch!=' ')
+    while (ch!='q')
     {
         ch = getch();
         if (ch != ERR) {
@@ -94,6 +103,8 @@ void move_serpent(g* grille)
 
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
+            ajouter_sec_fin(serpent->l, creer_section(1));
+
         }
         
         clear();
@@ -106,6 +117,8 @@ void move_serpent(g* grille)
 
 void endscreen_loose(s* serpent)
 {
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+    attron(COLOR_PAIR(1)); 
     clear();
     refresh();
     printw("fdsfdf");
@@ -114,7 +127,6 @@ void endscreen_loose(s* serpent)
 
 int atefruit(g* grille, s * serp){
   if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
-      ajouter_sec_fin(serp->l, creer_section(1));
       return 1;     
   }
   return 0;

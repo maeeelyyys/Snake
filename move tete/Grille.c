@@ -74,32 +74,34 @@ void Grille_remplir(g* grille)
 
 void Grille_serpent(g* grille, s* serp)
 {
-    // Placer la tête du serpent sur la grille
+    //  mettre la ête du serpent sur la grille
     grille->tab[serp->tete[0]][serp->tete[1]] = "2";
-
-    // Parcourir la liste de sections du serpent
-    sec* current_sec = serp->l->premier;
-    lm* current_mvt = serp->mov->premier;
-    
-    while (current_sec != NULL && current_mvt != NULL) {
-        // Mettre à jour la grille en fonction de chaque section et mouvement
-        for (int i = 1; i <= current_sec->taille; i++) {
-            if (current_mvt->direction == HAUT) {
-                grille->tab[serp->tete[0] - i][serp->tete[1]] = "2";
-            } else if (current_mvt->direction == BAS) {
-                grille->tab[serp->tete[0] + i][serp->tete[1]] = "2";
-            } else if (current_mvt->direction == GAUCHE) {
-                grille->tab[serp->tete[0]][serp->tete[1] - i] = "2";
-            } else if (current_mvt->direction == DROITE) {
-                grille->tab[serp->tete[0]][serp->tete[1] + i] = "2";
+    // on verifie qu'il y a des mouvements dans la liste
+    if (serp->mov != NULL && serp->mov->lg >= 2) {
+        lm* current_mvt = serp->mov->premier->suiv;
+        clear();
+        refresh();
+        printw("dsvcdfdfvf");
+        // parcours des mouvements à partir du deuxième
+        while (current_mvt != NULL) {
+            // mettre à jour la grille en fonction des mouvements
+            for (int i = 1; i < serp->l->lg; i++) {
+                if (current_mvt->direction == 'w')
+                    grille->tab[serp->tete[0] - i][serp->tete[1]] = "2";
+                else if (current_mvt->direction == 's')
+                    grille->tab[serp->tete[0] + i][serp->tete[1]] = "2";
+                else if (current_mvt->direction == 'd')
+                    grille->tab[serp->tete[0]][serp->tete[1] - i] = "2";
+                else if (current_mvt->direction == 'a')
+                    grille->tab[serp->tete[0]][serp->tete[1] + i] = "2";
             }
-        }
 
-        // Passer à la section et au mouvement suivant dans les listes
-        current_sec = current_sec->suiv;
-        current_mvt = current_mvt->suiv;
+            // mouvement suivant
+            current_mvt = current_mvt->suiv;
+        }
     }
 }
+
 
 void Grille_redessiner(g* grille)
 {

@@ -4,7 +4,7 @@
 #include <ncurses.h>
 #include "Grille.h"
 
-void getMenu();
-void move_serpent(g* grille);
-void endscreen_loose();
-int atefruit(g* grille, s* serp);
+void getMenu(); // affiche la fenetre de base "menu"
+void move_serpent(g* grille); // boucle du jeu a 1 serpent 
+void endscreen_loose(); // affiche la fenetre de fin de jeu quand on perd
+int atefruit(g* grille, s* serp); // renvoie un bool suivant si le fruit a ete mange par le serpent

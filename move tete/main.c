@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     //desallouer_section(&u);
     desallouer_liste(&l);
 
-
+    fprintf(stdout, "\x1B[5mRELANCEZ LE JEU ! \x1B[0m\n");
     //
     // Initialisation de ncurses et du clavier(4 lignes)
 	initscr();
@@ -52,10 +52,10 @@ int main(int argc, char** argv)
     if (has_colors()) 
     { 
         start_color();
-        init_pair(2, COLOR_WHITE, COLOR_BLUE); //foreground , background color
+        init_pair(2, COLOR_WHITE, COLOR_WHITE); //foreground , background color
         wbkgd(stdscr, COLOR_PAIR(2));
         wrefresh(stdscr);
-        init_pair(1, COLOR_BLACK, COLOR_MAGENTA); //foreground , background color
+        init_pair(1, COLOR_BLACK, COLOR_WHITE); //foreground , background color
         attron(COLOR_PAIR(1)); //applique la paire de couleurs avec l'index 1 à la fenêtre courante
     }
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
         }
         switch(ch)
         {
-            case 'e':
+            case ' ':
                 clear();
                 refresh();
                 move(0,0);
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
                 ;;
         }
 
-    }while(ch !=' ');
+    }while(ch !='q');
 
 
     //fin de ncurses 
