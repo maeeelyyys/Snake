@@ -6,20 +6,6 @@
 #ifndef _LISTE_SECTION_H
 #define _LISTE_SECTION_H
 
-enum dir{HAUT='w', BAS='s', GAUCHE='a', DROITE='d'};
-
-typedef struct liste_mouvement{
-    int coord[2];
-    enum dir direction;
-    struct liste_mouvement *suiv;
-}lm;
-
-typedef struct liste_mouvement_structure {
-    struct liste_mouvement *premier;  
-    struct liste_mouvement *dernier;  
-    int lg;                           
-} lsm;
-
 typedef struct section {
   int  taille; /* valeur du maillon */
   int coord[2];
@@ -31,17 +17,6 @@ typedef struct liste_structure {
   struct section *dernier; /* adresse du dernier maillon de la liste NULL si la liste est vide */
   int lg; /* nombre de section dans la liste */
 }ls;
-
-
-lm* creer_mouvement(int x, int y, enum dir direction);
-
-lsm* creer_liste_mouvement();
-
-void desallouer_mouvement(lm **m);
-
-void desallouer_liste_mouvement(lsm **toto);
-
-void ajouter_mvt_fin(lsm *lsm, lm *m);
 
 /* allocation sur le tas pour un maillon de valeur v */
 /* et renvoi de l'adresse du maillon */

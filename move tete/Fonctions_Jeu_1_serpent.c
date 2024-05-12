@@ -13,7 +13,7 @@ void getMenu()
     int max_y = getmaxy(stdscr)/2;
     int max_x = getmaxx(stdscr)/2 - strlen(title)/2;
     move(max_y, max_x);
-    attron(A_BOLD);
+    attron(A_BOLD); //mettre le texte en gras
     printw(title);
     attroff(A_BOLD);
     move(max_y + 9, getmaxx(stdscr)/2 - strlen(message)/2);
@@ -123,6 +123,8 @@ void move_serpent(g* grille)
         // pour bouger le reste du corps
         // on veut update les coordonnees a chaque fois 
         sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
+        serpent->l->premier->coord[1] = serpent->tete[0];
+        serpent->l->premier->coord[0] = serpent->tete[1];
         int prev_x = serpent->tete[0];
         int prev_y = serpent->tete[1];
         while (current != NULL) {
@@ -135,8 +137,7 @@ void move_serpent(g* grille)
             current = current->suiv;
         }
         // on update les coordonnees de la premiere qui suit la tete  
-        serpent->l->premier->coord[1] = serpent->tete[0];
-        serpent->l->premier->coord[0] = serpent->tete[1];
+        
 
         // petit bug quand meme du coup quand ca tourne ca en "efface" un pour tourner car deux se chevauchent
         clear();
@@ -157,8 +158,10 @@ void endscreen_loose(s* serpent)
     refresh();
     printw("BRAVO\n");
     printw("vous avez mange %d fruits", serpent->fruits);
+    getMenu();
 }
 
+//on regarde si un fruit a ete mange
 int atefruit(g* grille, s * serp){
   if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
       return 1;     
