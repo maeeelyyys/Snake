@@ -118,7 +118,9 @@ void move_serpent(g* grille)
 void endscreen_loose(s* serpent)
 {
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
-    attron(COLOR_PAIR(1)); 
+    attron(COLOR_PAIR(1));
+    wbkgd(stdscr, COLOR_PAIR(1));
+
     clear();
     refresh();
     printw("fdsfdf");
