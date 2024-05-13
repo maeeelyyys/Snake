@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
+
 #include "Serpent.h"
 
 #define  TRUE 1
@@ -11,8 +8,7 @@
 #define GRILLE_H_
 
 typedef struct Case{
-    char* couleur;
-    int timer;
+    char* elem;
 }c;
 
 typedef struct Grille_jeu{

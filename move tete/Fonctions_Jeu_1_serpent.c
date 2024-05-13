@@ -32,9 +32,9 @@ void choose_mode(int n, int m){
         int max_x = getmaxx(stdscr)/2 - strlen(worm)/2;
         int max_x1 = getmaxx(stdscr)/2 - strlen(snake)/2;
         move(max_y-4, max_x);
-        printw(worm);
+        printw("%s",worm);
         move(max_y+4, max_x1);
-        printw(snake);
+        printw("%s",snake);
 
     } while (ch != '1' && ch!= '2');
 
@@ -45,12 +45,13 @@ void choose_mode(int n, int m){
 
 void move_serpent(g* grille, unsigned mode_chosen)
 {
-    serpent->tete[0] = (grille->m)-1; 
-    //on le place dans la grille au debut
 
     char direction = 'd'; // on stocke la valeur du mouvement 
     s * serpent = malloc(sizeof(s)); // initialise le serpent
     int ch=0;
+    //on le place dans la grille au debut
+
+    serpent->tete[0] = (grille->m)-1; 
     serpent->tete[1] = 0;
     serpent->fruits = 0;
     serpent->l = creer_liste(serpent->tete[0], serpent->tete[1]);
@@ -152,11 +153,10 @@ void move_serpent(g* grille, unsigned mode_chosen)
             }
         }
 
-        ajouter_mvt_fin(serpent->mov, creer_mouvement(serpent->tete[0], serpent->tete[1], direction));
 
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
-            ajouter_sec_fin(serpent->l, creer_section(1));
+            ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0], serpent->tete[1]));
 
         }
         
@@ -199,21 +199,20 @@ int atefruit(g* grille, s * serp){
 
 void bouger_corps(s* serpent){
     // pour bouger le reste du corps
-        // on veut update les coordonnees a chaque fois 
-        sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
-        // on update les coordonnees de la premiere qui suit la tete  
-        serpent->l->premier->coord[1] = serpent->tete[0]; //premiere section correspond a la tete
-        serpent->l->premier->coord[0] = serpent->tete[1];
-        int prev_x = serpent->tete[0];
-        int prev_y = serpent->tete[1];
-        while (current != NULL) {
-            int tmp_x = current->coord[1];
-            int tmp_y = current->coord[0];
-                current->coord[1] = prev_x;
-                current->coord[0] = prev_y;  
-                prev_x = tmp_x;
-                prev_y = tmp_y;
-
-            current = current->suiv;
-        }
+    // on veut update les coordonnees a chaque fois 
+    sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
+    // on update les coordonnees de la premiere qui suit la tete  
+    serpent->l->premier->coord[1] = serpent->tete[0]; //premiere section correspond a la tete
+    serpent->l->premier->coord[0] = serpent->tete[1];
+    int prev_x = serpent->tete[0];
+    int prev_y = serpent->tete[1];
+    while (current != NULL) {
+        int tmp_x = current->coord[1];
+        int tmp_y = current->coord[0];
+        current->coord[1] = prev_x;
+        current->coord[0] = prev_y;  
+        prev_x = tmp_x;
+        prev_y = tmp_y;
+        current = current->suiv;
+    }
 }
