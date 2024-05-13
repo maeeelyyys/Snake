@@ -8,7 +8,7 @@
 int main(int argc, char** argv)
 {   
     fprintf(stdout, "\x1B[5mRELANCEZ LE JEU ! \x1B[0m\n");
-    //
+    
     // Initialisation de ncurses et du clavier(4 lignes)
 	initscr();
     raw();
@@ -60,5 +60,5 @@ int main(int argc, char** argv)
     //fin de ncurses 
     endwin();
     return 0;
-    
+  
 }

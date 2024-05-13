@@ -1,4 +1,8 @@
 {
     "C_Cpp.default.compilerPath": "/home/nassim/Documents/prog/Snake/move tete/Liste_section.h",
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "grille.h": "c",
+        "fonctions_jeu.h": "c"
+    }
 }

@@ -10,13 +10,21 @@
 #ifndef GRILLE_H_
 #define GRILLE_H_
 
-typedef struct {
+typedef struct Case{
+    char* couleur;
+    int timer;
+}c;
+
+typedef struct Grille_jeu{
 
     int n;
     int m;
-    char*** tab;
+    c*** tab;
     int fruit[2];
 } g;
+
+
+
 
 // prenant en entrée un deux entiers n et m qui retourne un pointeur sur une Grille,
 //dont le tableau est également alloué, c’est à dire que chacune de ses cases contient une chaîne de caractères de taille 8

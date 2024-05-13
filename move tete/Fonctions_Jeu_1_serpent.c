@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <time.h>
+#include <time.h>   
 #include <string.h>
 #include <ncurses.h>
 #include "Fonctions_Jeu.h"
@@ -13,13 +13,13 @@ void getMenu()
     int max_y = getmaxy(stdscr)/2;
     int max_x = getmaxx(stdscr)/2 - strlen(title)/2;
     move(max_y, max_x);
-    attron(A_BOLD); //mettre le texte en gras
-    printw(title);
+    attron(A_BOLD);
+    printw("%s",title);
     attroff(A_BOLD);
     move(max_y + 9, getmaxx(stdscr)/2 - strlen(message)/2);
-    printw(message);
+    printw("%s",message);
     move(max_y + 12, getmaxx(stdscr)/2 - strlen(message1)/2);
-    printw(message1);
+    printw("%s",message1);
 }
 
 void choose_mode(int n, int m){
@@ -45,12 +45,12 @@ void choose_mode(int n, int m){
 
 void move_serpent(g* grille, unsigned mode_chosen)
 {
-    int ch=0;
+    serpent->tete[0] = (grille->m)-1; 
+    //on le place dans la grille au debut
+
     char direction = 'd'; // on stocke la valeur du mouvement 
     s * serpent = malloc(sizeof(s)); // initialise le serpent
-
-    //on le place dans la grille au debut
-    serpent->tete[0] = (grille->m)-1; 
+    int ch=0;
     serpent->tete[1] = 0;
     serpent->fruits = 0;
     serpent->l = creer_liste(serpent->tete[0], serpent->tete[1]);
@@ -58,12 +58,12 @@ void move_serpent(g* grille, unsigned mode_chosen)
 
     //on affiche la grille
     draw_Grille(grille, serpent, 1);
-
     //pour le background
-    init_pair(1, COLOR_BLACK, COLOR_WHITE);
-    wbkgd(stdscr, COLOR_PAIR(1));
-    attron(COLOR_PAIR(1));
 
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+
+    attron(COLOR_PAIR(1));
+    wbkgd(stdscr, COLOR_PAIR(1));
     while (ch!='q')
     {
         ch = getch();
@@ -152,9 +152,12 @@ void move_serpent(g* grille, unsigned mode_chosen)
             }
         }
 
+        ajouter_mvt_fin(serpent->mov, creer_mouvement(serpent->tete[0], serpent->tete[1], direction));
+
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
-            ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
+            ajouter_sec_fin(serpent->l, creer_section(1));
+
         }
         
         //if on a le mode worm
@@ -166,6 +169,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
         clear();
         refresh();
         draw_Grille(grille, serpent, atefruit(grille, serpent));
+        
     }
         
     free(serpent);
@@ -179,8 +183,8 @@ void endscreen_loose(s* serpent)
 
     clear();
     refresh();
-    printw("BRAVO\n");
     printw("vous avez mange %d fruits", serpent->fruits);
+    printw("BRAVO\n");
     getMenu();
 }
 

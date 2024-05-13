@@ -33,7 +33,7 @@ void Grille_vider(g * grille)
     {
         for(j=0; j<grille->m; j++)
         {
-            grille->tab[i][j] = "  ";
+            grille->tab[i][j]->couleur = "  ";
         }
     }
 }
@@ -59,8 +59,12 @@ void  Grille_tirage_fruit(g *grille)
 
 void grille_desallouer(g *grille)
 {
-    int i;
+    int i,j;
     for(i=0;i<grille->n;i++){
+        for(j=0;j<grille->m;j++){
+            free(grille->tab[i][j]->couleur);
+            free(grille->tab[i][j]);
+        }
         free(grille->tab[i]);
     }
     free(grille->tab);
@@ -121,17 +125,26 @@ void Grille_redessiner(g* grille)
             }
             else
             {
-                if (strcmp(grille->tab[i - 1][j - 1], "1") == 0) // fruit
+                if (strcmp(grille->tab[i - 1][j - 1]->couleur, "1") == 0) // fruit
                 {
                     attron(COLOR_PAIR(2));
                     printw("  ");
                     attroff(COLOR_PAIR(2));
                 }
-                else if (strcmp(grille->tab[i - 1][j - 1], "2") == 0) // snake
+                else if (strcmp(grille->tab[i - 1][j - 1]->couleur, "2") == 0) // snake
                 {
-                    attron(COLOR_PAIR(5));
-                    printw("  ");
-                    attroff(COLOR_PAIR(5));
+                    if(grille->tab[i-1][j-1]->timer>1){
+                        --grille->tab[i-1][j-1]->timer;
+                        attron(COLOR_PAIR(5));
+                        printw("  ");
+                        attroff(COLOR_PAIR(5));
+                    }else if(grille->tab[i-1][j-1]->timer==1){
+                        attron(COLOR_PAIR(5));
+                        printw("  ");
+                        attroff(COLOR_PAIR(5));
+                        --grille->tab[i-1][j-1]->timer;
+                        grille->tab[i - 1][j - 1]->couleur="  ";
+                    }
                 }
                 else // font of the grid
                 {
