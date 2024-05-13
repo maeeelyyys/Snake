@@ -7,40 +7,71 @@
 
 void getMenu()
 {
-    char* title = "SNAKE";
+    show_title();
+    int max_y = getmaxy(stdscr)/2 -10;
     char* message = "ENTREZ SPACE TO START";
     char* message1 = "ENTREZ Q POUR QUITTER";
-    int max_y = getmaxy(stdscr)/2;
-    int max_x = getmaxx(stdscr)/2 - strlen(title)/2;
-    move(max_y, max_x);
-    attron(A_BOLD); //mettre le texte en gras
-    printw(title);
-    attroff(A_BOLD);
     move(max_y + 9, getmaxx(stdscr)/2 - strlen(message)/2);
+    attron(A_BLINK);
     printw(message);
+    attroff(A_BLINK);
     move(max_y + 12, getmaxx(stdscr)/2 - strlen(message1)/2);
+    attron(A_BLINK);
     printw(message1);
+    attroff(A_BLINK);
 }
 
 void choose_mode(int n, int m){
-    char * worm = "WORM MODE";
-    char * snake = "SNAKE MODE";
-    int ch=0;
+    char *worm = "WORM MODE";
+    char *snake = "SNAKE MODE";
+    char *texte  = "- press 1 -";
+    char *texte1 = "- press 2 -";
+    
+    int ch = 0;
     do {
         ch = getch();
-        int max_y = getmaxy(stdscr)/2;
-        int max_x = getmaxx(stdscr)/2 - strlen(worm)/2;
-        int max_x1 = getmaxx(stdscr)/2 - strlen(snake)/2;
-        move(max_y-4, max_x);
-        printw(worm);
-        move(max_y+4, max_x1);
-        printw(snake);
 
-    } while (ch != '1' && ch!= '2');
+        // Clear the screen
+        clear();
+        show_title();
+        // Calculate the positions for each text
+        int max_y = getmaxy(stdscr) / 2;
+        int max_x_worm = getmaxx(stdscr) / 2 - strlen(worm) - strlen(texte) / 2;
+        int max_x_snake = getmaxx(stdscr) / 2 + strlen(texte) / 2;
+        int max_x_texte = getmaxx(stdscr) / 2 - strlen(texte) / 2 - strlen(texte1) ;
 
-    //afficher la grille
-    g * grille = Grille_allouer(n, m);
-    move_serpent(grille, ch);
+        // Print "WORM MODE"
+        attron(A_STANDOUT);
+        mvprintw(max_y +4, max_x_worm -10, worm);
+        attroff(A_STANDOUT);
+
+        // Print "- press 1 -"
+        mvprintw(max_y +6, max_x_texte -9, texte);
+
+        // Print "SNAKE MODE"
+        attron(A_STANDOUT);
+        mvprintw(max_y +4, max_x_snake +10, snake);
+        attroff(A_STANDOUT);
+
+        // Print "- press 2 -"
+        mvprintw(max_y +6, getmaxx(stdscr) / 2 + strlen(texte) / 2 +9, texte1);
+
+    } while (ch != '1' && ch != '2' && ch != 'q');
+    if (ch == 'q')
+    {
+        clear();
+        refresh();
+        getMenu();
+    }
+    else
+    {
+        clear();
+        refresh();
+        //afficher la grille
+        g * grille = Grille_allouer(n, m);
+        move_serpent(grille, ch);
+    }
+    
 }
 
 void move_serpent(g* grille, unsigned mode_chosen)
@@ -212,4 +243,31 @@ void bouger_corps(s* serpent){
 
             current = current->suiv;
         }
+}
+
+void show_title(){
+    char* title[] = {
+        "   SSSSS   N     N    A    K   K  EEEEE",
+        "  S        NN    N   A A   K  K   E    ",
+        "   SSS     N N   N  AAAAA  KKK    EEEE ",
+        "      S    N  N  N  A   A  K  K   E    ",
+        "  SSSSS    N   N N  A   A  K   K  EEEEE"
+    };
+      /*" ██████╗ ███╗   ██╗ █████╗   ██╗  ██╗  ██████╗",
+        "██╔════╝ ████╗  ██║ ██╔══██╗ ██║ ██╔╝ ██╔════╝",
+        "███████╗ ██╔██╗ ██║ ███████║ ███████║ ███████╗",
+        "╚════██║ ██║╚██╗██║ ██╔══██║ ██╔══██║ ██╔════╝",
+        "███████║ ██║ ╚ ███║ ██║  ██║ ██║  ██║ ███████║",
+        "╚══════╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚══════╝"
+    */
+    int i;
+    int max_y = getmaxy(stdscr)/2 -10;
+    for(i=0; i< 5; i++)
+    {
+        int max_x = getmaxx(stdscr)/2 - strlen(title[i])/2;
+        move(max_y + i, max_x);
+        attron(A_BOLD ); //mettre le texte en gras
+        printw(title[i]);
+        attroff(A_BOLD);
+    }
 }

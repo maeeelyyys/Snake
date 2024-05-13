@@ -10,3 +10,4 @@ void move_serpent(g* grille, unsigned mode_chosen); // boucle du jeu a 1 serpent
 void endscreen_loose(); // affiche la fenetre de fin de jeu quand on perd
 int atefruit(g* grille, s* serp); // renvoie un bool suivant si le fruit a ete mange par le serpent
 void bouger_corps(s* serpent);
+void show_title();
