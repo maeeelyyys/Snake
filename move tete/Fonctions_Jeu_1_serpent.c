@@ -7,7 +7,7 @@
 
 void getMenu()
 {
-    char* title = "JEU SNAKE";
+    char* title = "SNAKE";
     char* message = "ENTREZ SPACE TO START";
     char* message1 = "ENTREZ Q POUR QUITTER";
     int max_y = getmaxy(stdscr)/2;
@@ -20,10 +20,30 @@ void getMenu()
     printw(message);
     move(max_y + 12, getmaxx(stdscr)/2 - strlen(message1)/2);
     printw(message1);
-        
 }
 
-void move_serpent(g* grille)
+void choose_mode(int n, int m){
+    char * worm = "WORM MODE";
+    char * snake = "SNAKE MODE";
+    int ch=0;
+    do {
+        ch = getch();
+        int max_y = getmaxy(stdscr)/2;
+        int max_x = getmaxx(stdscr)/2 - strlen(worm)/2;
+        int max_x1 = getmaxx(stdscr)/2 - strlen(snake)/2;
+        move(max_y-4, max_x);
+        printw(worm);
+        move(max_y+4, max_x1);
+        printw(snake);
+
+    } while (ch != '1' && ch!= '2');
+
+    //afficher la grille
+    g * grille = Grille_allouer(n, m);
+    move_serpent(grille, ch);
+}
+
+void move_serpent(g* grille, unsigned mode_chosen)
 {
     int ch=0;
     char direction = 'd'; // on stocke la valeur du mouvement 
@@ -81,7 +101,12 @@ void move_serpent(g* grille)
                 // si le mouvement est vers le haut on change les coordonnees de la tete pour quelle monte dans la grille et ainsi de suite suivant l input x ou y sera modifie
                 case 'w':
                     if (serpent->tete[0] > 0)
+                    {
                         serpent->tete[0] -= 1;
+                        if(mode_chosen == '2')
+                            bouger_corps(serpent);
+
+                    }
                     // et si jamais on ne peut pas avancer cela siginifie qu on est au bord de la grille et on affiche donc un autre ecran 
                     else { 
                         endscreen_loose(serpent);
@@ -90,7 +115,11 @@ void move_serpent(g* grille)
                     break;
                 case 'a':
                     if (serpent->tete[1] > 0)
+                    {
                         serpent->tete[1] -= 1;
+                        if(mode_chosen == '2')
+                            bouger_corps(serpent);
+                    }
                     else {
                         endscreen_loose(serpent);
                         return;
@@ -98,7 +127,11 @@ void move_serpent(g* grille)
                     break;
                 case 's':
                     if (serpent->tete[0] < (grille->n) - 1)
+                    {
                         serpent->tete[0] += 1;
+                        if(mode_chosen == '2')
+                        bouger_corps(serpent);
+                    }
                     else {
                         endscreen_loose(serpent);
                         return;
@@ -106,7 +139,11 @@ void move_serpent(g* grille)
                     break;
                 case 'd':
                     if (serpent->tete[1] < grille->m - 1)
+                    {
                         serpent->tete[1] += 1;
+                        if(mode_chosen == '2')
+                        bouger_corps(serpent);
+                    }
                     else {
                         endscreen_loose(serpent);
                         return;
@@ -119,27 +156,13 @@ void move_serpent(g* grille)
             serpent->fruits+=1;
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
         }
-
-        // pour bouger le reste du corps
-        // on veut update les coordonnees a chaque fois 
-        sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
-        serpent->l->premier->coord[1] = serpent->tete[0];
-        serpent->l->premier->coord[0] = serpent->tete[1];
-        int prev_x = serpent->tete[0];
-        int prev_y = serpent->tete[1];
-        while (current != NULL) {
-            int tmp_x = current->coord[1];
-            int tmp_y = current->coord[0];
-            current->coord[1] = prev_x;
-            current->coord[0] = prev_y;
-            prev_x = tmp_x;
-            prev_y = tmp_y;
-            current = current->suiv;
-        }
-        // on update les coordonnees de la premiere qui suit la tete  
         
+        //if on a le mode worm
+        if (mode_chosen == '1')
+            bouger_corps(serpent);
+        //et pas dans les cases
 
-        // petit bug quand meme du coup quand ca tourne ca en "efface" un pour tourner car deux se chevauchent
+
         clear();
         refresh();
         draw_Grille(grille, serpent, atefruit(grille, serpent));
@@ -167,4 +190,26 @@ int atefruit(g* grille, s * serp){
       return 1;     
   }
   return 0;
+}
+
+
+void bouger_corps(s* serpent){
+    // pour bouger le reste du corps
+        // on veut update les coordonnees a chaque fois 
+        sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
+        // on update les coordonnees de la premiere qui suit la tete  
+        serpent->l->premier->coord[1] = serpent->tete[0]; //premiere section correspond a la tete
+        serpent->l->premier->coord[0] = serpent->tete[1];
+        int prev_x = serpent->tete[0];
+        int prev_y = serpent->tete[1];
+        while (current != NULL) {
+            int tmp_x = current->coord[1];
+            int tmp_y = current->coord[0];
+                current->coord[1] = prev_x;
+                current->coord[0] = prev_y;  
+                prev_x = tmp_x;
+                prev_y = tmp_y;
+
+            current = current->suiv;
+        }
 }

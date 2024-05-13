@@ -89,7 +89,7 @@ void Grille_redessiner(g* grille)
 {
     int i, j, x, y;
 
-    // Calculate the starting coordinates to draw the grid in the center
+    //coordinates to draw the grid in the center
     x = (getmaxx(stdscr) - grille->m * 2) / 2;
     y = (getmaxy(stdscr) - grille->n - 2) / 2;
 

@@ -40,24 +40,16 @@ int main(int argc, char** argv)
     halfdelay(atoi(argv[3]));
 
     clear();
-    int start = 0;
-
     do{
         ch = getch();
-        if(start == 0)
-        {
-            getMenu();
-        }
+        getMenu();
         switch(ch)
         {
             case ' ':
                 clear();
                 refresh();
                 move(0,0);
-                //afficher la grille
-                g * grille = Grille_allouer(n, m);
-                move_serpent(grille);
-                start = 1;
+                choose_mode(n, m);
                 break;
                 ;;
         }
