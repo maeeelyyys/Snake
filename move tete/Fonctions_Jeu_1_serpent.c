@@ -239,14 +239,10 @@ void bouger_corps(s* serpent, unsigned mode_chosen, g * grille){
         while (current != NULL) {
             int tmp_x = current->coord[1];
             int tmp_y = current->coord[0];
-            if(strcmp(grille->tab[tmp_x][tmp_x], "2") == 0)
-                {clear();
-                 refresh();}
                 current->coord[1] = prev_x;
                 current->coord[0] = prev_y;  
                 prev_x = tmp_x;
                 prev_y = tmp_y;
-
             current = current->suiv;
         }
 }
