@@ -10,15 +10,8 @@ void getMenu()
     show_title();
     int max_y = getmaxy(stdscr)/2 -10;
     char* message = "ENTREZ SPACE TO START";
-    char* message1 = "ENTREZ Q POUR QUITTER";
-    move(max_y + 9, getmaxx(stdscr)/2 - strlen(message)/2);
-    attron(A_BLINK);
+    move(max_y +15, getmaxx(stdscr)/2 - strlen(message)/2);
     printw(message);
-    attroff(A_BLINK);
-    move(max_y + 12, getmaxx(stdscr)/2 - strlen(message1)/2);
-    attron(A_BLINK);
-    printw(message1);
-    attroff(A_BLINK);
 }
 
 void choose_mode(int n, int m){
@@ -46,15 +39,18 @@ void choose_mode(int n, int m){
         attroff(A_STANDOUT);
 
         // Print "- press 1 -"
+        attron(A_BLINK);
         mvprintw(max_y +6, max_x_texte -9, texte);
-
+        attroff(A_BLINK);
         // Print "SNAKE MODE"
         attron(A_STANDOUT);
         mvprintw(max_y +4, max_x_snake +10, snake);
         attroff(A_STANDOUT);
 
         // Print "- press 2 -"
+        attron(A_BLINK);
         mvprintw(max_y +6, getmaxx(stdscr) / 2 + strlen(texte) / 2 +9, texte1);
+        attroff(A_BLINK);
 
     } while (ch != '1' && ch != '2' && ch != 'q');
     if (ch == 'q')
@@ -69,6 +65,7 @@ void choose_mode(int n, int m){
         refresh();
         //afficher la grille
         g * grille = Grille_allouer(n, m);
+        grille->couleur_snake = 4; //couleur par defaut du serpent
         move_serpent(grille, ch);
     }
     
@@ -135,7 +132,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
                     {
                         serpent->tete[0] -= 1;
                         if(mode_chosen == '2')
-                            bouger_corps(serpent);
+                            bouger_corps(serpent, mode_chosen, grille);
 
                     }
                     // et si jamais on ne peut pas avancer cela siginifie qu on est au bord de la grille et on affiche donc un autre ecran 
@@ -149,7 +146,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
                     {
                         serpent->tete[1] -= 1;
                         if(mode_chosen == '2')
-                            bouger_corps(serpent);
+                            bouger_corps(serpent, mode_chosen, grille);
                     }
                     else {
                         endscreen_loose(serpent);
@@ -161,7 +158,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
                     {
                         serpent->tete[0] += 1;
                         if(mode_chosen == '2')
-                        bouger_corps(serpent);
+                            bouger_corps(serpent, mode_chosen, grille);
                     }
                     else {
                         endscreen_loose(serpent);
@@ -173,7 +170,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
                     {
                         serpent->tete[1] += 1;
                         if(mode_chosen == '2')
-                        bouger_corps(serpent);
+                            bouger_corps(serpent, mode_chosen, grille);
                     }
                     else {
                         endscreen_loose(serpent);
@@ -190,7 +187,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
         
         //if on a le mode worm
         if (mode_chosen == '1')
-            bouger_corps(serpent);
+            bouger_corps(serpent, mode_chosen, grille);
         //et pas dans les cases
 
 
@@ -218,13 +215,14 @@ void endscreen_loose(s* serpent)
 //on regarde si un fruit a ete mange
 int atefruit(g* grille, s * serp){
   if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
+      grille->couleur_snake = grille->couleur_fruit;
       return 1;     
   }
   return 0;
 }
 
 
-void bouger_corps(s* serpent){
+void bouger_corps(s* serpent, unsigned mode_chosen, g * grille){
     // pour bouger le reste du corps
         // on veut update les coordonnees a chaque fois 
         sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
@@ -236,6 +234,9 @@ void bouger_corps(s* serpent){
         while (current != NULL) {
             int tmp_x = current->coord[1];
             int tmp_y = current->coord[0];
+            if(strcmp(grille->tab[tmp_x][tmp_x], "2") == 0)
+                {clear();
+                 refresh();}
                 current->coord[1] = prev_x;
                 current->coord[0] = prev_y;  
                 prev_x = tmp_x;
@@ -270,4 +271,7 @@ void show_title(){
         printw(title[i]);
         attroff(A_BOLD);
     }
+    char* message1 = "ENTREZ Q POUR QUITTER";
+    move(max_y + 20, getmaxx(stdscr)/2 - strlen(message1)/2);
+    printw(message1);
 }

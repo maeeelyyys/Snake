@@ -16,6 +16,8 @@ typedef struct {
     int m;
     char*** tab;
     int fruit[2];
+    int couleur_fruit; //pour la couleur du nouveau fruit
+    int couleur_snake; // pour la couleur du fruit mange
 } g;
 
 // prenant en entrée un deux entiers n et m qui retourne un pointeur sur une Grille,
