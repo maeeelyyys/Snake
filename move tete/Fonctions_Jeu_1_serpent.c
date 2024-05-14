@@ -65,7 +65,10 @@ void choose_mode(int n, int m){
         refresh();
         //afficher la grille
         g * grille = Grille_allouer(n, m);
-        grille->couleur_snake = 4; //couleur par defaut du serpent
+        if(ch == '2')
+            grille->couleur_snake = 4; //couleur par defaut du serpent
+        else
+            grille->couleur_snake = 9; //couleur par defaut du worm
         move_serpent(grille, ch);
     }
     
@@ -85,7 +88,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
     ajouter_sec_fin(serpent->l, creer_section(1, serpent->tete[0]-1, serpent->tete[1]));
 
     //on affiche la grille
-    draw_Grille(grille, serpent, 1);
+    draw_Grille(grille, serpent, 1, mode_chosen);
 
     //pour le background
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
@@ -183,6 +186,9 @@ void move_serpent(g* grille, unsigned mode_chosen)
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
+            if(mode_chosen == '2')
+                grille->couleur_snake = grille->couleur_fruit;
+
         }
         
         //if on a le mode worm
@@ -193,7 +199,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
 
         clear();
         refresh();
-        draw_Grille(grille, serpent, atefruit(grille, serpent));
+        draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen);
     }
         
     free(serpent);
@@ -215,7 +221,6 @@ void endscreen_loose(s* serpent)
 //on regarde si un fruit a ete mange
 int atefruit(g* grille, s * serp){
   if (grille->fruit[0] == serp->tete[0] && grille->fruit[1] == serp->tete[1]){
-      grille->couleur_snake = grille->couleur_fruit;
       return 1;     
   }
   return 0;

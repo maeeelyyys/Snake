@@ -26,7 +26,7 @@ g * Grille_allouer(int n, int m);
 
 void Grille_vider(g* grille);
 
-void Grille_tirage_fruit(g* grille);
+void Grille_tirage_fruit(g* grille, unsigned mode_chosen);
 
 void Grille_remplir(g* grille);
 
@@ -36,7 +36,7 @@ void Grille_desallouer(g* grille);
 
 void Grille_redessiner(g* grille);
 
-void draw_Grille(g* grille, s* , int fruit);
+void draw_Grille(g* grille, s* , int fruit, unsigned mode_chosen);
 
 void Grille_remplir_serpent(g * grille);
 

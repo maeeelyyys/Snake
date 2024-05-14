@@ -43,7 +43,7 @@ int Sur_serpent(int x, int y)
     return 1;
 }
 
-void Grille_tirage_fruit(g *grille)
+void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
 {
     int x;
     int y;
@@ -56,11 +56,19 @@ void Grille_tirage_fruit(g *grille)
     grille->fruit[0]=x;
     grille->fruit[1]=y;
 
-    // generer une couleur de fruit differente a chaque fois que un fruit a ete mange et doit donc etre re affiche
-    int tmp = grille->couleur_fruit;
-    do{
-        grille->couleur_fruit = rand()%5 +4;
-    }while(grille->couleur_fruit == tmp);
+    if(mode_chosen == '2')
+    {
+       // generer une couleur de fruit differente a chaque fois que un fruit a ete mange et doit donc etre re affiche
+        int tmp = grille->couleur_fruit;
+        do{
+            grille->couleur_fruit = rand()%5 +4;
+        }while(grille->couleur_fruit == tmp);
+    }
+    else
+    {
+        grille->couleur_fruit = 5;
+    }
+    
 }
 
 void grille_desallouer(g *grille)
@@ -114,8 +122,7 @@ void Grille_redessiner(g* grille)
     init_pair(6, COLOR_WHITE, COLOR_MAGENTA); // color of the fruit
     init_pair(7, COLOR_WHITE, COLOR_YELLOW); // color of the fruit
     init_pair(8, COLOR_WHITE, COLOR_CYAN); // color of the fruit
-
-
+    init_pair(9, COLOR_WHITE, COLOR_MAGENTA); // color of the worm
 
 
     // loop through each cell of the grid and draw it
@@ -165,12 +172,12 @@ void Grille_redessiner(g* grille)
 
 
 //rassemble toutes les fonctions pour commencer avec la grille de depart
-void draw_Grille(g* grille, s* serp, int fruit)
+void draw_Grille(g* grille, s* serp, int fruit, unsigned mode_chosen)
 {
     Grille_vider(grille);
     if(fruit == 1)
     {
-        Grille_tirage_fruit(grille); 
+        Grille_tirage_fruit(grille, mode_chosen); 
     }
     Grille_remplir(grille);
     Grille_serpent(grille, serp);
