@@ -54,7 +54,7 @@ int main(int argc, char** argv)
                 ;;
         }
 
-    }while(ch !='q');
+    }while(ch !='f');
 
 
     //fin de ncurses 

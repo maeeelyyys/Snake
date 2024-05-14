@@ -86,11 +86,7 @@ void grille_desallouer(g *grille)
 
 void Grille_remplir(g* grille)
 {
-<<<<<<< HEAD
     grille->tab[grille->fruit[0]][grille->fruit[1]]->elem = "fruit";
-=======
-    grille->tab[grille->fruit[0]][grille->fruit[1]] = "1";
->>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
 }
 
 void Grille_serpent(g* grille, s* serp)
