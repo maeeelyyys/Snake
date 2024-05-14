@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <time.h>
+#include <time.h>   
 #include <string.h>
 #include <ncurses.h>
 #include "Fonctions_Jeu.h"
@@ -10,8 +10,22 @@ void getMenu()
     show_title();
     int max_y = getmaxy(stdscr)/2 -10;
     char* message = "ENTREZ SPACE TO START";
+<<<<<<< HEAD
+    char* message1 = "ENTREZ Q POUR QUITTER";
+    int max_y = getmaxy(stdscr)/2;
+    int max_x = getmaxx(stdscr)/2 - strlen(title)/2;
+    move(max_y, max_x);
+    attron(A_BOLD);
+    printw("%s",title);
+    attroff(A_BOLD);
+    move(max_y + 9, getmaxx(stdscr)/2 - strlen(message)/2);
+    printw("%s",message);
+    move(max_y + 12, getmaxx(stdscr)/2 - strlen(message1)/2);
+    printw("%s",message1);
+=======
     move(max_y +15, getmaxx(stdscr)/2 - strlen(message)/2);
     printw(message);
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
 }
 
 void choose_mode(int n, int m){
@@ -23,6 +37,16 @@ void choose_mode(int n, int m){
     int ch = 0;
     do {
         ch = getch();
+<<<<<<< HEAD
+        int max_y = getmaxy(stdscr)/2;
+        int max_x = getmaxx(stdscr)/2 - strlen(worm)/2;
+        int max_x1 = getmaxx(stdscr)/2 - strlen(snake)/2;
+        move(max_y-4, max_x);
+        printw("%s",worm);
+        move(max_y+4, max_x1);
+        printw("%s",snake);
+=======
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
 
         // Clear the screen
         clear();
@@ -76,11 +100,12 @@ void choose_mode(int n, int m){
 
 void move_serpent(g* grille, unsigned mode_chosen)
 {
-    int ch=0;
+
     char direction = 'd'; // on stocke la valeur du mouvement 
     s * serpent = malloc(sizeof(s)); // initialise le serpent
-
+    int ch=0;
     //on le place dans la grille au debut
+
     serpent->tete[0] = (grille->m)-1; 
     serpent->tete[1] = 0;
     serpent->fruits = 0;
@@ -88,13 +113,18 @@ void move_serpent(g* grille, unsigned mode_chosen)
     ajouter_sec_fin(serpent->l, creer_section(1, serpent->tete[0]-1, serpent->tete[1]));
 
     //on affiche la grille
+<<<<<<< HEAD
+    draw_Grille(grille, serpent, 1);
+=======
     draw_Grille(grille, serpent, 1, mode_chosen);
 
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
     //pour le background
-    init_pair(1, COLOR_BLACK, COLOR_WHITE);
-    wbkgd(stdscr, COLOR_PAIR(1));
-    attron(COLOR_PAIR(1));
 
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+
+    attron(COLOR_PAIR(1));
+    wbkgd(stdscr, COLOR_PAIR(1));
     while (ch!='q')
     {
         ch = getch();
@@ -183,11 +213,16 @@ void move_serpent(g* grille, unsigned mode_chosen)
             }
         }
 
+
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
+<<<<<<< HEAD
+            ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0], serpent->tete[1]));
+=======
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
             if(mode_chosen == '2')
                 grille->couleur_snake = grille->couleur_fruit;
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
 
         }
         
@@ -199,7 +234,12 @@ void move_serpent(g* grille, unsigned mode_chosen)
 
         clear();
         refresh();
+<<<<<<< HEAD
+        draw_Grille(grille, serpent, atefruit(grille, serpent));
+        
+=======
         draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen);
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
     }
         
     free(serpent);
@@ -213,8 +253,8 @@ void endscreen_loose(s* serpent)
 
     clear();
     refresh();
-    printw("BRAVO\n");
     printw("vous avez mange %d fruits", serpent->fruits);
+    printw("BRAVO\n");
     getMenu();
 }
 
@@ -229,6 +269,24 @@ int atefruit(g* grille, s * serp){
 
 void bouger_corps(s* serpent, unsigned mode_chosen, g * grille){
     // pour bouger le reste du corps
+<<<<<<< HEAD
+    // on veut update les coordonnees a chaque fois 
+    sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
+    // on update les coordonnees de la premiere qui suit la tete  
+    serpent->l->premier->coord[1] = serpent->tete[0]; //premiere section correspond a la tete
+    serpent->l->premier->coord[0] = serpent->tete[1];
+    int prev_x = serpent->tete[0];
+    int prev_y = serpent->tete[1];
+    while (current != NULL) {
+        int tmp_x = current->coord[1];
+        int tmp_y = current->coord[0];
+        current->coord[1] = prev_x;
+        current->coord[0] = prev_y;  
+        prev_x = tmp_x;
+        prev_y = tmp_y;
+        current = current->suiv;
+    }
+=======
         // on veut update les coordonnees a chaque fois 
         sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
         // on update les coordonnees de la premiere qui suit la tete  
@@ -275,4 +333,5 @@ void show_title(){
     char* message1 = "ENTREZ Q POUR QUITTER";
     move(max_y + 20, getmaxx(stdscr)/2 - strlen(message1)/2);
     printw(message1);
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
 }

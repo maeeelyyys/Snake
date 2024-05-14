@@ -103,7 +103,7 @@ void ajouter_sec_fin(ls *l, sec *s){
     /*Description fonction*/    
     ++l->lg;
     l->dernier->suiv=s;
-    l->dernier=s;   
+    l->dernier=s;  
 }
 
 
@@ -163,7 +163,6 @@ void afficher_ls(const ls *l){
         printf("La section n°%d est de taille %d\n",i,s->taille);
         i++;       
         s=s->suiv;
-        printf(" TOUR \n");
     }
 
 }

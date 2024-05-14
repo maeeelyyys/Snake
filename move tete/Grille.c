@@ -20,7 +20,7 @@ g * Grille_allouer(int n, int m)
         grille->tab[i] = malloc(m*sizeof(char*));
         for(j=0; j<m; j++)
         {
-            grille->tab[i][j] = malloc(sizeof(char[8]));
+            grille->tab[i][j] = malloc(sizeof(char[10]));
         }
     }
     return grille;
@@ -33,7 +33,7 @@ void Grille_vider(g * grille)
     {
         for(j=0; j<grille->m; j++)
         {
-            grille->tab[i][j] = "  ";
+            grille->tab[i][j]->elem = "  ";
         }
     }
 }
@@ -73,8 +73,12 @@ void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
 
 void grille_desallouer(g *grille)
 {
-    int i;
+    int i,j;
     for(i=0;i<grille->n;i++){
+        for(j=0;j<grille->m;j++){
+            free(grille->tab[i][j]->elem);
+            free(grille->tab[i][j]);
+        }
         free(grille->tab[i]);
     }
     free(grille->tab);
@@ -82,16 +86,20 @@ void grille_desallouer(g *grille)
 
 void Grille_remplir(g* grille)
 {
+<<<<<<< HEAD
+    grille->tab[grille->fruit[0]][grille->fruit[1]]->elem = "fruit";
+=======
     grille->tab[grille->fruit[0]][grille->fruit[1]] = "1";
+>>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
 }
 
 void Grille_serpent(g* grille, s* serp)
 {
     //  mettre la tête du serpent sur la grille
-    grille->tab[serp->tete[0]][serp->tete[1]] = "2";
+    grille->tab[serp->tete[0]][serp->tete[1]]->elem = "body";
     sec * tmp = serp->l->premier;
     while (tmp != NULL){
-        grille->tab[tmp->coord[1]][tmp->coord[0]] = "2";
+        grille->tab[tmp->coord[1]][tmp->coord[0]]->elem = "body";
         tmp = tmp->suiv;
     }
     
@@ -142,13 +150,13 @@ void Grille_redessiner(g* grille)
             }
             else
             {
-                if (strcmp(grille->tab[i - 1][j - 1], "1") == 0) // fruit
+                if (strcmp(grille->tab[i - 1][j - 1]->elem, "fruit") == 0) // fruit
                 {
                     attron(COLOR_PAIR(grille->couleur_fruit));
                     printw("  ");
                     attroff(COLOR_PAIR(grille->couleur_fruit));
                 }
-                else if (strcmp(grille->tab[i - 1][j - 1], "2") == 0) // snake
+                else if (strcmp(grille->tab[i - 1][j - 1]->elem, "body") == 0) // snake
                 {
                     attron(COLOR_PAIR(grille->couleur_snake));
                     printw("  ");
@@ -161,6 +169,7 @@ void Grille_redessiner(g* grille)
                     attroff(COLOR_PAIR(2));
                 }
             }
+
 
             
         }
