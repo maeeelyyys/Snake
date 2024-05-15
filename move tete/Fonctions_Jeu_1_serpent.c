@@ -131,14 +131,15 @@ void move_serpent(g* grille, unsigned mode_chosen)
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
-            if(mode_chosen == '2' || mode_chosen == '1' || mode_chosen == '3')
+            if(mode_chosen == '2' || mode_chosen == '3')
             {
                 grille->couleur_snake = grille->couleur_fruit;
-                if(serpent->fruits>=(20)){
+                
+            }
+            if(serpent->fruits>=(20)){
                     endscreen_win(serpent);
                     return;
                 }
-            }
 
         }
         
@@ -146,12 +147,16 @@ void move_serpent(g* grille, unsigned mode_chosen)
         if (mode_chosen == '1')
         {
             bouger_corps(serpent, grille);
+            if (strcmp(grille->tab[serpent->tete[0]][serpent->tete[1]]->elem,"mob")==0)
+            {
+                endscreen_loose(serpent);
+                return;
+            }
             
         }
         //et pas dans les cases
 
         refresh();
-        clear();
         draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen, serpent2);
 
     }

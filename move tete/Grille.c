@@ -62,7 +62,7 @@ void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
     grille->fruit[0]=x;
     grille->fruit[1]=y;
 
-    if(mode_chosen == '2')
+    if(mode_chosen == '2' || mode_chosen == '3')
     {
        // generer une couleur de fruit differente a chaque fois que un fruit a ete mange et doit donc etre re affiche
         int tmp = grille->couleur_fruit;
@@ -203,9 +203,9 @@ void Grille_redessiner(g* grille)
                 }
                 else if (strcmp(grille->tab[i - 1][j - 1]->elem, "mob") == 0) // Mode pve
                 {
-                    attron(COLOR_PAIR(3));
+                    attron(COLOR_PAIR(1));
                     printw("  ");
-                    attroff(COLOR_PAIR(3));
+                    attroff(COLOR_PAIR(1));
                 }
                 else // font of the grid
                 {
