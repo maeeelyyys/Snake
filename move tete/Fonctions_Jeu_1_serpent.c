@@ -52,8 +52,8 @@ void choose_mode(int n, int m){
         mvprintw(max_y +6, getmaxx(stdscr) / 2 + strlen(texte) / 2 +9,"%s", texte1);
         attroff(A_BLINK);
 
-    } while (ch != '1' && ch != '2' && ch != 'q');
-    if (ch == 'q')
+    } while (ch != '1' && ch != '2' && ch != 'f');
+    if (ch == 'f')
     {
         clear();
         refresh();
@@ -238,6 +238,10 @@ void move_serpent(g* grille, unsigned mode_chosen)
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
             if(mode_chosen == '2')
                 grille->couleur_snake = grille->couleur_fruit;
+            if(serpent->fruits==(grille->n*grille->m)){
+                endscreen_win(serpent);
+                return;
+            }
 
         }
         
@@ -247,7 +251,6 @@ void move_serpent(g* grille, unsigned mode_chosen)
         //et pas dans les cases
 
 
-        clear();
         refresh();
         draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen);
     }
@@ -263,10 +266,23 @@ void endscreen_loose(s* serpent)
 
     clear();
     refresh();
-    printw("vous avez mange %d fruits", serpent->fruits);
-    printw("BRAVO\n");
+    printw("Dommage, vous avez mange %d fruits, vous etiez si proche !", serpent->fruits);
     getMenu();
 }
+
+void endscreen_win(s* serpent){
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+    attron(COLOR_PAIR(1));
+    wbkgd(stdscr, COLOR_PAIR(1));
+    //peut etre ne faire qu'une seule fonction et en fonction du nombre de fruit mangé
+    //on sait si le joueur ) gagner ou non
+    clear();
+    refresh();
+    printw("Félicitation ");
+    getMenu();
+
+}
+
 
 //on regarde si un fruit a ete mange
 int atefruit(g* grille, s * serp){

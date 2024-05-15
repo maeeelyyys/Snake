@@ -38,9 +38,12 @@ void Grille_vider(g * grille)
     }
 }
 
-int Sur_serpent(int x, int y)
+int Case_vide(g* grille,int x, int y)
 {
-    return 1;
+    if(strcmp(grille->tab[x][y]->elem,"body")==0){
+        return 1;
+    }
+    return 0;
 }
 
 void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
@@ -51,7 +54,7 @@ void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
     do{
         x=rand()%grille->n;
         y=rand()%grille->m;
-    }while(Sur_serpent(x,y)==0);
+    }while(Case_vide(grille,x,y)==1);
 
     grille->fruit[0]=x;
     grille->fruit[1]=y;
@@ -70,7 +73,24 @@ void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
     }
     
 }
+void Grille_tirage_monstre(g *grille,int nb)
+{
+    int x;
+    int y;
+    int i;
 
+    for(i=0;i<nb;i++){
+        do{
+            x=rand()%grille->n;
+            y=rand()%grille->m;
+        }while(Case_vide(grille,x,y)==0);
+
+        grille->mob[i][0]=x;
+        grille->mob[i][1]=y;
+
+    }      
+    
+}
 void grille_desallouer(g *grille)
 {
     int i,j;
@@ -87,6 +107,14 @@ void grille_desallouer(g *grille)
 void Grille_remplir(g* grille)
 {
     grille->tab[grille->fruit[0]][grille->fruit[1]]->elem = "fruit";
+    /*
+        int i;
+
+    //Le mode Pve implique 5 monstres en permanence
+    for(i=0;i<5;i++){
+        //grille->tab[grille->mob[i][0]][grille->mob[i][1]]->elem="mob";
+    }
+    */
 }
 
 void Grille_serpent(g* grille, s* serp)
@@ -158,6 +186,12 @@ void Grille_redessiner(g* grille)
                     printw("  ");
                     attroff(COLOR_PAIR(grille->couleur_snake));
                 }
+                else if (strcmp(grille->tab[i - 1][j - 1]->elem, "mob") == 0) // Mode pve
+                {
+                    attron(COLOR_PAIR(5));
+                    printw("  ");
+                    attroff(COLOR_PAIR(5));
+                }
                 else // font of the grid
                 {
                     attron(COLOR_PAIR(2));
@@ -180,11 +214,15 @@ void Grille_redessiner(g* grille)
 void draw_Grille(g* grille, s* serp, int fruit, unsigned mode_chosen)
 {
     Grille_vider(grille);
+    Grille_serpent(grille, serp);
     if(fruit == 1)
     {
         Grille_tirage_fruit(grille, mode_chosen); 
     }
+    if(mode_chosen=='1' && grille->n>9 && grille->m>9)
+    {
+        Grille_tirage_monstre(grille,5);
+    }
     Grille_remplir(grille);
-    Grille_serpent(grille, serp);
     Grille_redessiner(grille);
 }
