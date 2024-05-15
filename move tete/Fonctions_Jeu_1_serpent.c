@@ -120,7 +120,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
                 direction2 = mov_two_player(ch, direction2);
         }
         else {
-            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1)
+            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1 && move_serpent_direction(grille, serpent2, direction,  mode_chosen) == 1)
             {
                 endscreen_loose(serpent);
                 break;
@@ -128,7 +128,6 @@ void move_serpent(g* grille, unsigned mode_chosen)
             }
 
         }
-
 
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
@@ -317,6 +316,7 @@ char mov_one_player(int ch, char direction)
                     break;
         }
     }
+    return direction;
 }
 char mov_two_player(int ch, char direction2)
 {
@@ -342,6 +342,7 @@ char mov_two_player(int ch, char direction2)
                     break;
         }
     }
+    return direction2;
 }
 
 
