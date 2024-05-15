@@ -120,13 +120,12 @@ void move_serpent(g* grille, unsigned mode_chosen)
                 direction2 = mov_two_player(ch, direction2);
         }
         else {
-            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1 && move_serpent_direction(grille, serpent2, direction2,  mode_chosen) == 1)
+            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1 && (mode_chosen == '2' || mode_chosen == '3'))
             {
                 endscreen_loose(serpent);
                 break;
 
             }
-
         }
 
         if (atefruit(grille, serpent) == 1) {
@@ -139,7 +138,10 @@ void move_serpent(g* grille, unsigned mode_chosen)
         
         //if on a le mode worm
         if (mode_chosen == '1')
+        {
             bouger_corps(serpent, grille);
+            
+        }
         //et pas dans les cases
 
         refresh();
@@ -187,11 +189,6 @@ void bouger_corps(s* serpent, g * grille){
         while (current != NULL) {
             int tmp_x = current->coord[1];
             int tmp_y = current->coord[0];
-            if(strcmp(grille->tab[tmp_x][tmp_x]->elem, "body") == 0)
-            {
-                clear();
-                refresh();
-            }
             current->coord[1] = prev_x;
             current->coord[0] = prev_y;  
             prev_x = tmp_x;
@@ -219,8 +216,16 @@ int move_serpent_direction(g* grille, s* serpent, char direction, unsigned mode_
 }
 
 int move_serpent_up(g* grille, s* serpent, unsigned mode_chosen) {
+
+    if (mode_chosen == '1') {
+        if (serpent->tete[0] == 0)
+            serpent->tete[0] = grille->n - 1;
+        else
+            serpent->tete[0]--;
+        return 1;
+    }
     if (serpent->tete[0] > 0) {
-        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0] - 1, serpent->tete[1]))
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0] - 1, serpent->tete[1], mode_chosen))
             return 1;
         serpent->tete[0]--;
         if ((mode_chosen == '2' || mode_chosen == '3') )
@@ -233,8 +238,15 @@ int move_serpent_up(g* grille, s* serpent, unsigned mode_chosen) {
 }
 
 int move_serpent_left(g* grille, s* serpent, unsigned mode_chosen) {
+    if (mode_chosen == '1') {
+        if (serpent->tete[1] == 0)
+            serpent->tete[1] = grille->m - 1;
+        else
+            serpent->tete[1]--;
+        return 1;
+    }
     if (serpent->tete[1] > 0) {
-        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0], serpent->tete[1] - 1))
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0], serpent->tete[1] - 1, mode_chosen))
             return 1;
         serpent->tete[1]--;
         if ((mode_chosen == '2' || mode_chosen == '3') )
@@ -247,8 +259,15 @@ int move_serpent_left(g* grille, s* serpent, unsigned mode_chosen) {
 }
 
 int move_serpent_down(g* grille, s* serpent, unsigned mode_chosen) {
+    if (mode_chosen == '1') {
+        if (serpent->tete[0] == grille->n - 1)
+            serpent->tete[0] = 0;
+        else
+            serpent->tete[0]++;
+        return 1;
+    }
     if (serpent->tete[0] < grille->n - 1) {
-        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0] + 1, serpent->tete[1]))
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0] + 1, serpent->tete[1], mode_chosen))
             return 1;
         serpent->tete[0]++;
         if ((mode_chosen == '2' || mode_chosen == '3') )
@@ -261,8 +280,15 @@ int move_serpent_down(g* grille, s* serpent, unsigned mode_chosen) {
 }
 
 int move_serpent_right(g* grille, s* serpent, unsigned mode_chosen) {
+    if (mode_chosen == '1') {
+        if (serpent->tete[1] == grille->m - 1)
+            serpent->tete[1] = 0;
+        else
+            serpent->tete[1]++;
+        return 1;
+    }
     if (serpent->tete[1] < grille->m - 1) {
-        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0], serpent->tete[1] + 1))
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0], serpent->tete[1] + 1, mode_chosen))
             return 1;
         serpent->tete[1]++;
         if ((mode_chosen == '2' || mode_chosen == '3') )
@@ -274,20 +300,19 @@ int move_serpent_right(g* grille, s* serpent, unsigned mode_chosen) {
     return 1;
 }
 
-int is_collision(g* grille, int x, int y) {
-    // Check if the coordinates are within the grid boundaries
+int is_collision(g* grille, int x, int y, unsigned mode_chosen) {
+
+    // coordinates collide with any body segment
+    if ((mode_chosen == '2' || mode_chosen == '3') && strcmp(grille->tab[x][y]->elem, "body") == 0)
+        return 1; // collision with body
+    //coordinates are within the grid boundaries
     if (x < 0 || y < 0 || x >= grille->n || y >= grille->m) {
         clear();
         refresh();
-        return 1; // Collision with border
+        return 1; // collision with border
     }
 
-    // Check if the coordinates collide with any body segment
-    if (strcmp(grille->tab[x][y]->elem, "body") == 0) {
-        return 1; // Collision with body
-    }
-
-    return 0; // No collision
+    return 0; // no collision
 }
 
 char mov_one_player(int ch, char direction)

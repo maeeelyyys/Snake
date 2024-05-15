@@ -18,7 +18,7 @@ int move_serpent_left(g* grille, s* serpent, unsigned mode_chosen);
 int move_serpent_up(g* grille, s* serpent, unsigned mode_chosen);
 int move_serpent_direction(g* grille, s* serpent, char direction, unsigned mode_chosen);
 void bouger_corps(s* serpent, g * grille);
-int is_collision(g* grille, int x, int y);
+int is_collision(g* grille, int x, int y, unsigned mode_chosen);
 
 char mov_one_player(int ch, char direction);
 char mov_two_player(int ch, char direction2);
