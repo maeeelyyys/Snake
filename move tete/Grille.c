@@ -22,6 +22,8 @@ g * Grille_allouer(int n, int m)
         for(j=0; j<m; j++)
         {
             grille->tab[i][j] = malloc(sizeof(char[10]));
+            grille->tab[i][j]->elem = malloc(sizeof(char*));
+
         }
     }
     return grille;

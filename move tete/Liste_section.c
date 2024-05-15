@@ -164,6 +164,5 @@ void afficher_ls(const ls *l){
         i++;       
         s=s->suiv;
     }
-
 }
 
