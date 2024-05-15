@@ -81,14 +81,14 @@ void choose_mode(int n, int m){
 
 void move_serpent(g* grille, unsigned mode_chosen)
 {
-
     char direction = 'd'; // on stocke la valeur du mouvement
     char direction2 = 'd';
     s * serpent = malloc(sizeof(s)); // initialise le serpent
     s * serpent2 = malloc(sizeof(s));
     int ch=0;
-    //on le place dans la grille au debut
+    grille->mobs = 0;
 
+    //on le place dans la grille au debut
     serpent->tete[0] = (grille->m)-1; 
     serpent->tete[1] = 0;
     serpent->fruits = 0;
@@ -131,11 +131,13 @@ void move_serpent(g* grille, unsigned mode_chosen)
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
-            if(mode_chosen == '2')
+            if(mode_chosen == '2' || mode_chosen == '1' || mode_chosen == '3')
+            {
                 grille->couleur_snake = grille->couleur_fruit;
-            if(serpent->fruits==(grille->n*grille->m)){
-                endscreen_win(serpent);
-                return;
+                if(serpent->fruits>=(20)){
+                    endscreen_win(serpent);
+                    return;
+                }
             }
 
         }

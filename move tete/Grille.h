@@ -17,7 +17,8 @@ typedef struct Grille_jeu{
     int m;
     c*** tab;
     int fruit[2];
-    int mob[5][2];
+    int mob[100][2];
+    int mobs;
     int couleur_fruit; //pour la couleur du nouveau fruit
     int couleur_snake; // pour la couleur du fruit mange
     int couleur_tete;
