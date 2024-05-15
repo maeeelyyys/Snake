@@ -146,6 +146,11 @@ void move_serpent(g* grille, unsigned mode_chosen)
         if (mode_chosen == '1')
         {
             bouger_corps(serpent, grille);
+            if (strcmp(grille->tab[serpent->tete[0]][serpent->tete[1]]->elem,"mob")==0)
+            {
+                endscreen_loose(serpent);
+                return;
+            }
             
         }
         //et pas dans les cases

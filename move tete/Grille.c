@@ -201,9 +201,9 @@ void Grille_redessiner(g* grille)
                 }
                 else if (strcmp(grille->tab[i - 1][j - 1]->elem, "mob") == 0) // Mode pve
                 {
-                    attron(COLOR_PAIR(3));
+                    attron(COLOR_PAIR(1));
                     printw("  ");
-                    attroff(COLOR_PAIR(3));
+                    attroff(COLOR_PAIR(1));
                 }
                 else // font of the grid
                 {
