@@ -20,6 +20,7 @@ typedef struct Grille_jeu{
     int mob[5][2];
     int couleur_fruit; //pour la couleur du nouveau fruit
     int couleur_snake; // pour la couleur du fruit mange
+    int couleur_tete;
 } g;
 
 
@@ -45,7 +46,7 @@ void Grille_desallouer(g* grille);
 
 void Grille_redessiner(g* grille);
 
-void draw_Grille(g* grille, s* , int fruit, unsigned mode_chosen);
+void draw_Grille(g* grille, s* , int fruit, unsigned mode_chosen, s* serp1);
 
 void Grille_remplir_serpent(g * grille);
 

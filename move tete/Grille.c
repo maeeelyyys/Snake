@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include <ncurses.h>
+#include <unistd.h>
 #include "Fonctions_Jeu.h"
 
 g * Grille_allouer(int n, int m)
@@ -120,10 +121,14 @@ void Grille_remplir(g* grille)
 void Grille_serpent(g* grille, s* serp)
 {
     //  mettre la tête du serpent sur la grille
-    grille->tab[serp->tete[0]][serp->tete[1]]->elem = "body";
+    grille->tab[serp->tete[0]][serp->tete[1]]->elem = "tete";
+    grille->tab[serp->l->premier->coord[1]][serp->l->premier->coord[0]]->elem = "tete";
     sec * tmp = serp->l->premier;
     while (tmp != NULL){
-        grille->tab[tmp->coord[1]][tmp->coord[0]]->elem = "body";
+        if(tmp == serp->l->premier->suiv)
+            grille->tab[tmp->coord[1]][tmp->coord[0]]->elem = "tete";
+        else
+            grille->tab[tmp->coord[1]][tmp->coord[0]]->elem = "body";
         tmp = tmp->suiv;
     }
     
@@ -140,7 +145,7 @@ void Grille_redessiner(g* grille)
     // Initialize color pairs
     start_color();
     init_color(COLOR_BLUE, 102, 178, 255);
-    init_pair(1, COLOR_WHITE, COLOR_WHITE); // window background color
+    init_pair(1, COLOR_BLACK, COLOR_WHITE); // window background color
     init_pair(3, COLOR_WHITE, COLOR_BLUE); // border color
     init_pair(2, COLOR_WHITE, COLOR_BLACK); //background of the grid color
 
@@ -186,6 +191,12 @@ void Grille_redessiner(g* grille)
                     printw("  ");
                     attroff(COLOR_PAIR(grille->couleur_snake));
                 }
+                else if (strcmp(grille->tab[i - 1][j - 1]->elem, "tete") == 0) // snake
+                {
+                    attron(COLOR_PAIR(grille->couleur_snake));
+                    printw("<3");
+                    attroff(COLOR_PAIR(grille->couleur_snake));
+                }
                 else if (strcmp(grille->tab[i - 1][j - 1]->elem, "mob") == 0) // Mode pve
                 {
                     attron(COLOR_PAIR(5));
@@ -211,7 +222,7 @@ void Grille_redessiner(g* grille)
 
 
 //rassemble toutes les fonctions pour commencer avec la grille de depart
-void draw_Grille(g* grille, s* serp, int fruit, unsigned mode_chosen)
+void draw_Grille(g* grille, s* serp, int fruit, unsigned mode_chosen, s* serp1)
 {
     Grille_vider(grille);
     Grille_serpent(grille, serp);
@@ -224,5 +235,8 @@ void draw_Grille(g* grille, s* serp, int fruit, unsigned mode_chosen)
         Grille_tirage_monstre(grille,5);
     }
     Grille_remplir(grille);
+    Grille_serpent(grille, serp);
+    if (mode_chosen == '3' && serp1 != NULL)
+        Grille_serpent(grille, serp1);
     Grille_redessiner(grille);
 }
