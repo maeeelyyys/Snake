@@ -60,7 +60,7 @@ void Grille_tirage_fruit(g *grille, unsigned mode_chosen)
     grille->fruit[0]=x;
     grille->fruit[1]=y;
 
-    if(mode_chosen == '2')
+    if(mode_chosen == '2' || mode_chosen == '3')
     {
        // generer une couleur de fruit differente a chaque fois que un fruit a ete mange et doit donc etre re affiche
         int tmp = grille->couleur_fruit;
