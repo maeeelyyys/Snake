@@ -91,7 +91,9 @@ void Grille_tirage_monstre(g *grille,int nb)
         grille->mob[i + grille->mobs][0]=x;
         grille->mob[i + grille->mobs][1]=y;
 
-    }      
+    }
+    grille->mobs += nb;
+
     
 }
 void grille_desallouer(g *grille)
@@ -114,7 +116,7 @@ void Grille_remplir(g* grille)
     int i;
 
     //Le mode Pve implique 5 monstres en permanence
-    for(i=0;i<5;i++){
+    for(i=0;i<grille->mobs;i++){
         grille->tab[grille->mob[i][0]][grille->mob[i][1]]->elem="mob";
     }
     
@@ -234,7 +236,6 @@ void draw_Grille(g* grille, s* serp, int fruit, unsigned mode_chosen, s* serp1)
         if(mode_chosen=='1' && grille->n>9 && grille->m>9)
         {
             Grille_tirage_monstre(grille,5);
-            grille->mobs += 4;
         }
     }
     Grille_remplir(grille);
