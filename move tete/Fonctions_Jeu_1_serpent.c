@@ -120,7 +120,7 @@ void move_serpent(g* grille, unsigned mode_chosen)
                 direction2 = mov_two_player(ch, direction2);
         }
         else {
-            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1 && move_serpent_direction(grille, serpent2, direction,  mode_chosen) == 1)
+            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1 && move_serpent_direction(grille, serpent2, direction2,  mode_chosen) == 1)
             {
                 endscreen_loose(serpent);
                 break;
