@@ -10,50 +10,55 @@ void getMenu()
     show_title();
     int max_y = getmaxy(stdscr)/2 -10;
     char* message = "ENTREZ SPACE TO START";
-    move(max_y +15, getmaxx(stdscr)/2 - strlen(message)/2);
+    move(max_y +15, (getmaxx(stdscr)+1)/2 - strlen(message)/2);
     printw("%s",message);
 }
 
 void choose_mode(int n, int m){
-    char *worm = "WORM MODE";
-    char *snake = "SNAKE MODE";
-    char *texte  = "- press 1 -";
-    char *texte1 = "- press 2 -";
+
+    //lists with the different modes and texts below it 
+    char *modes[] = {"WORM MODE", "SNAKE MODE", "TWO PLAYERS MODE"};
+    char *text[] = {"- press 1 -", "- press 2 -", "- press 3 -"};
+
+    int num_modes = sizeof(modes) / sizeof(modes[0]);
     
     int ch = 0;
     do {
         ch = getch();
 
         // Clear the screen
-        clear();
+        refresh();
+        //show the title 
         show_title();
-        // Calculate the positions for each text
+        //calculate middle of the screen
         int max_y = getmaxy(stdscr) / 2;
-        int max_x_worm = getmaxx(stdscr) / 2 - strlen(worm) - strlen(texte) / 2;
-        int max_x_snake = getmaxx(stdscr) / 2 + strlen(texte) / 2;
-        int max_x_texte = getmaxx(stdscr) / 2 - strlen(texte) / 2 - strlen(texte1) ;
+        int max_x = getmaxx(stdscr) / 2;
+        int space_btw =10; // is the space between modes
 
-        // Print "WORM MODE"
-        attron(A_STANDOUT);
-        mvprintw(max_y +4, max_x_worm -10, "%s",worm);
-        attroff(A_STANDOUT);
+        // Calculate the position at the start 
+        int start_x = max_x - (strlen(modes[0])/2 + strlen(modes[1])/2 + strlen(modes[2])/2 + space_btw);
 
-        // Print "- press 1 -"
-        attron(A_BLINK);
-        mvprintw(max_y +6, max_x_texte -9,"%s", texte);
-        attroff(A_BLINK);
-        // Print "SNAKE MODE"
-        attron(A_STANDOUT);
-        mvprintw(max_y +4, max_x_snake +10,"%s", snake);
-        attroff(A_STANDOUT);
+        //for each mode and corresponding text
+        for (int i = 0; i < num_modes; i++) {
+            //position for the current mode being printed
+            int mode_x = start_x + i * (strlen(modes[0]) + space_btw); 
 
-        // Print "- press 2 -"
-        attron(A_BLINK);
-        mvprintw(max_y +6, getmaxx(stdscr) / 2 + strlen(texte) / 2 +9,"%s", texte1);
-        attroff(A_BLINK);
+            //print the mode
+            attron(A_STANDOUT);
+            mvprintw(max_y, mode_x, "%s", modes[i]);
+            attroff(A_STANDOUT);
 
-    } while (ch != '1' && ch != '2' && ch != 'q');
-    if (ch == 'q')
+            //position for the text below
+            int text_x = mode_x + (strlen(modes[i]) - strlen(text[i])) / 2;
+
+            // Print the text
+            attron(A_BLINK);
+            mvprintw(max_y + 2, text_x, "%s", text[i]);
+            attroff(A_BLINK);
+        }
+
+    } while (ch != '1' && ch != '2' && ch != '3' && ch != 'f');
+    if (ch == 'f')
     {
         clear();
         refresh();
@@ -65,9 +70,9 @@ void choose_mode(int n, int m){
         refresh();
         //afficher la grille
         g * grille = Grille_allouer(n, m);
-        if(ch == '2')
+        if(ch == '2' || ch == '3')
             grille->couleur_snake = 4; //couleur par defaut du serpent
-        else
+        else if (ch == '1')
             grille->couleur_snake = 9; //couleur par defaut du worm
         move_serpent(grille, ch);
     }
@@ -77,8 +82,10 @@ void choose_mode(int n, int m){
 void move_serpent(g* grille, unsigned mode_chosen)
 {
 
-    char direction = 'd'; // on stocke la valeur du mouvement 
+    char direction = 'd'; // on stocke la valeur du mouvement
+    char direction2 = 'd';
     s * serpent = malloc(sizeof(s)); // initialise le serpent
+    s * serpent2 = malloc(sizeof(s));
     int ch=0;
     //on le place dans la grille au debut
 
@@ -88,11 +95,18 @@ void move_serpent(g* grille, unsigned mode_chosen)
     serpent->l = creer_liste(serpent->tete[0], serpent->tete[1]);
     ajouter_sec_fin(serpent->l, creer_section(1, serpent->tete[0], serpent->tete[1]));
 
+    if(mode_chosen == '3')
+    {
+        serpent2->tete[0] = 0;
+        serpent2->tete[1] = (grille->n) - 1;
+        serpent2->fruits = 0;
+        serpent2->l = creer_liste(serpent2->tete[0], serpent2->tete[1]);
+        ajouter_sec_fin(serpent2->l, creer_section(1, serpent2->tete[0], serpent2->tete[1]));
+    }
     //on affiche la grille
-    draw_Grille(grille, serpent, 1, mode_chosen);
+    draw_Grille(grille, serpent, 1, mode_chosen, serpent2);
 
     //pour le background
-
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
 
     attron(COLOR_PAIR(1));
@@ -101,135 +115,18 @@ void move_serpent(g* grille, unsigned mode_chosen)
     {
         ch = getch();
         if (ch != ERR) {
-            switch (ch)
-            {
-                // pour les mouvements on a wasd, zqsd et les fleches
-                case 'w':
-                case 'z':
-                case KEY_UP: 
-                    if(direction != 's') // pour ne pas pouvoir faire un mouvement de haut vers le bas directement 
-                        direction = 'w';
-                    break;
-                case 'a':
-                case 'q':
-                case KEY_LEFT:
-                    if(direction != 'd') // de meme avec les cotes 
-                        direction = 'a';
-                    break;
-                case 's':
-                case KEY_DOWN:
-                    if(direction != 'w')
-                        direction = 's';
-                    break;
-                case 'd':
-                case KEY_RIGHT:
-                    if(direction != 'a')
-                        direction = 'd';
-                    break;
-            }
+            direction = mov_one_player(ch, direction);
+            if(mode_chosen == '3')
+                direction2 = mov_two_player(ch, direction2);
         }
         else {
-            switch (direction)
+            if (move_serpent_direction(grille, serpent, direction,  mode_chosen) == 1)
             {
-                // si le mouvement est vers le haut on change les coordonnees de la tete pour quelle monte dans la grille et ainsi de suite suivant l input x ou y sera modifie
-                case 'w':
-                    if (serpent->tete[0] > 0)
-                    {   
-                        //Serpent
-                        if(mode_chosen == '2')
-                        {
-                            //Gestion des collisions
-                            if(strcmp(grille->tab[serpent->tete[0]-1][serpent->tete[1]]->elem,"body")==0){
-                                endscreen_loose(serpent);
-                                return;
-                            }
-                            serpent->tete[0] -= 1;
-                            bouger_corps(serpent, mode_chosen, grille);
-                        }
-                        else{
-                            serpent->tete[0] -= 1;
-                        }
+                endscreen_loose(serpent);
+                break;
 
-                    }
-                    // et si jamais on ne peut pas avancer cela siginifie qu on est au bord de la grille et on affiche donc un autre ecran 
-                    else { 
-                        endscreen_loose(serpent);
-                        return;
-                    }
-                    break;
-                case 'a':
-                    if (serpent->tete[1] > 0)
-                    {
-                        //Serpent
-                        if(mode_chosen == '2')
-                        {
-                            //Gestion des collisions
-                            if(strcmp(grille->tab[serpent->tete[0]][serpent->tete[1]-1]->elem,"body")==0){
-                                endscreen_loose(serpent);
-                                return;
-                            }
-                            serpent->tete[1] -= 1;
-                            bouger_corps(serpent, mode_chosen, grille);
-                        }
-                        else{
-                            serpent->tete[1] -= 1;
-                        }
-
-                    }
-                    else {
-                        endscreen_loose(serpent);
-                        return;
-                    }
-                    break;
-                case 's':
-                    if (serpent->tete[0] < (grille->n) - 1)
-                    {
-                        //Serpent
-                        if(mode_chosen == '2')
-                        {
-                            //Gestion des collisions
-                            if(strcmp(grille->tab[serpent->tete[0]+1][serpent->tete[1]]->elem,"body")==0){
-                                endscreen_loose(serpent);
-                                return;
-                            }
-                            serpent->tete[0] += 1;
-                            bouger_corps(serpent, mode_chosen, grille);
-                        }
-                        else{
-                            serpent->tete[0] += 1;
-                        }
-
-                    }
-                    else {
-                        endscreen_loose(serpent);
-                        return;
-                    }
-                    break;
-                case 'd':
-                    if (serpent->tete[1] < grille->m - 1)
-                    {
-                        //Serpent
-                        if(mode_chosen == '2')
-                        {
-                            //Gestion des collisions
-                            if(strcmp(grille->tab[serpent->tete[0]][serpent->tete[1]+1]->elem,"body")==0){
-                                endscreen_loose(serpent);
-                                return;
-                            }
-                            serpent->tete[1] += 1;
-                            bouger_corps(serpent, mode_chosen, grille);
-                        }
-                        else{
-                            serpent->tete[1] += 1;
-                        }
-
-                    }
-                    else {
-                        endscreen_loose(serpent);
-                        return;
-                    }
-                    break;
             }
+
         }
 
 
@@ -243,16 +140,17 @@ void move_serpent(g* grille, unsigned mode_chosen)
         
         //if on a le mode worm
         if (mode_chosen == '1')
-            bouger_corps(serpent, mode_chosen, grille);
+            bouger_corps(serpent, grille);
         //et pas dans les cases
 
-
-        clear();
         refresh();
-        draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen);
+        clear();
+        draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen, serpent2);
+
     }
         
     free(serpent);
+    free(serpent2);
 }
 
 void endscreen_loose(s* serpent)
@@ -263,6 +161,7 @@ void endscreen_loose(s* serpent)
 
     clear();
     refresh();
+    fflush(stdout);
     printw("vous avez mange %d fruits", serpent->fruits);
     printw("BRAVO\n");
     getMenu();
@@ -277,7 +176,7 @@ int atefruit(g* grille, s * serp){
 }
 
 
-void bouger_corps(s* serpent, unsigned mode_chosen, g * grille){
+void bouger_corps(s* serpent, g * grille){
     // pour bouger le reste du corps
         // on veut update les coordonnees a chaque fois 
         sec *current = serpent->l->premier->suiv; // on commence a partir de la deuxieme (1er c la tete)
@@ -296,6 +195,150 @@ void bouger_corps(s* serpent, unsigned mode_chosen, g * grille){
             current = current->suiv;
         }
 }
+
+
+int move_serpent_direction(g* grille, s* serpent, char direction, unsigned mode_chosen) {
+    switch (direction) {
+        case 'w':
+            return move_serpent_up(grille, serpent, mode_chosen);
+            break;
+        case 'a':
+            return move_serpent_left(grille, serpent, mode_chosen);
+            break;
+        case 's':
+            return move_serpent_down(grille, serpent, mode_chosen);
+            break;
+        case 'd':
+            return move_serpent_right(grille, serpent, mode_chosen);
+            break;
+    }
+}
+
+int move_serpent_up(g* grille, s* serpent, unsigned mode_chosen) {
+    if (serpent->tete[0] > 0) {
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0] - 1, serpent->tete[1]))
+            return 1;
+        serpent->tete[0]--;
+        if ((mode_chosen == '2' || mode_chosen == '3') )
+        {
+            bouger_corps(serpent, grille);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int move_serpent_left(g* grille, s* serpent, unsigned mode_chosen) {
+    if (serpent->tete[1] > 0) {
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0], serpent->tete[1] - 1))
+            return 1;
+        serpent->tete[1]--;
+        if ((mode_chosen == '2' || mode_chosen == '3') )
+        {
+            bouger_corps(serpent, grille);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int move_serpent_down(g* grille, s* serpent, unsigned mode_chosen) {
+    if (serpent->tete[0] < grille->n - 1) {
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0] + 1, serpent->tete[1]))
+            return 1;
+        serpent->tete[0]++;
+        if ((mode_chosen == '2' || mode_chosen == '3') )
+        {
+            bouger_corps(serpent, grille);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int move_serpent_right(g* grille, s* serpent, unsigned mode_chosen) {
+    if (serpent->tete[1] < grille->m - 1) {
+        if ((mode_chosen == '2' || mode_chosen == '3')  && is_collision(grille, serpent->tete[0], serpent->tete[1] + 1))
+            return 1;
+        serpent->tete[1]++;
+        if ((mode_chosen == '2' || mode_chosen == '3') )
+        {
+             bouger_corps(serpent, grille);
+             return 0;
+        }
+    }
+    return 1;
+}
+
+int is_collision(g* grille, int x, int y) {
+    // Check if the coordinates are within the grid boundaries
+    if (x < 0 || y < 0 || x >= grille->n || y >= grille->m) {
+        clear();
+        refresh();
+        return 1; // Collision with border
+    }
+
+    // Check if the coordinates collide with any body segment
+    if (strcmp(grille->tab[x][y]->elem, "body") == 0) {
+        return 1; // Collision with body
+    }
+
+    return 0; // No collision
+}
+
+char mov_one_player(int ch, char direction)
+{
+    if (ch != ERR) {
+        switch (ch)
+        {
+    // pour les mouvements on a wasd, zqsd 
+                case 'w':
+                case 'z':
+                    if(direction != 's') // pour ne pas pouvoir faire un mouvement de haut vers le bas directement 
+                        return 'w';
+                    break;
+                case 'a':
+                case 'q':
+                    if(direction != 'd') // de meme avec les cotes 
+                        return'a';
+                    break;
+                case 's':
+                    if(direction != 'w')
+                        return 's';
+                    break;
+                case 'd':
+                    if(direction != 'a')
+                        return 'd';
+                    break;
+        }
+    }
+}
+char mov_two_player(int ch, char direction2)
+{
+    if (ch != ERR) {
+        switch (ch)
+        {
+    // pour les mouvements on a les fleches
+                case KEY_UP:
+                    if(direction2 != 's') 
+                        return 'w';
+                    break;
+                case KEY_LEFT:
+                    if(direction2 != 'd') 
+                        return 'a';
+                    break;
+                case KEY_DOWN:
+                    if(direction2 != 'w') 
+                        return 's';
+                    break;
+                case KEY_RIGHT:
+                    if(direction2 != 'a') 
+                        return 'd';
+                    break;
+        }
+    }
+}
+
 
 void show_title(){
     char* title[] = {
@@ -323,6 +366,6 @@ void show_title(){
         attroff(A_BOLD);
     }
     char* message1 = "ENTREZ F POUR FERMER";
-    move(max_y + 20, getmaxx(stdscr)/2 - strlen(message1)/2);
+    move(max_y + 20, (getmaxx(stdscr)+1)/2 - strlen(message1)/2);
     printw("%s",message1);
 }

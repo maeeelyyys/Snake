@@ -6,12 +6,19 @@
 
 void getMenu(); // affiche la fenetre de base "menu"
 void choose_mode(int n, int m);
-void move_serpent(g* grille, unsigned mode_chosen); // boucle du jeu a 1 serpent 
+void show_title();
+
 void endscreen_loose(); // affiche la fenetre de fin de jeu quand on perd
 int atefruit(g* grille, s* serp); // renvoie un bool suivant si le fruit a ete mange par le serpent
-<<<<<<< HEAD
-void bouger_corps(s* serpent);
-=======
-void bouger_corps(s* serpent, unsigned mdoe_chosen, g* grille);
-void show_title();
->>>>>>> 0f1235274571753e3d3afc5da82ed4e63e8f8f44
+
+void move_serpent(g* grille, unsigned mode_chosen); // boucle du jeu a 1 serpent
+int move_serpent_right(g* grille, s* serpent, unsigned mode_chosen);
+int move_serpent_down(g* grille, s* serpent, unsigned mode_chosen);
+int move_serpent_left(g* grille, s* serpent, unsigned mode_chosen);
+int move_serpent_up(g* grille, s* serpent, unsigned mode_chosen);
+int move_serpent_direction(g* grille, s* serpent, char direction, unsigned mode_chosen);
+void bouger_corps(s* serpent, g * grille);
+int is_collision(g* grille, int x, int y);
+
+char mov_one_player(int ch, char direction);
+char mov_two_player(int ch, char direction2);
