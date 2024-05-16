@@ -82,11 +82,13 @@ void choose_mode(int n, int m){
 void move_serpent(g* grille, unsigned mode_chosen)
 {
     char direction = 'd'; // on stocke la valeur du mouvement
-    char direction2 = 'd';
+    char direction2 = 'a';
     s * serpent = malloc(sizeof(s)); // initialise le serpent
     s * serpent2 = malloc(sizeof(s));
     int ch=0;
     grille->mobs = 0;
+
+    int quelserpent=0;
 
     //on le place dans la grille au debut
     serpent->tete[0] = (grille->m)-1; 
@@ -126,23 +128,47 @@ void move_serpent(g* grille, unsigned mode_chosen)
                 break;
 
             }
+            if (move_serpent_direction(grille, serpent2, direction2,  mode_chosen) == 1 && (mode_chosen == '3'))
+            {
+                endscreen_loose(serpent2);
+                break;
+
+            }
         }
 
         if (atefruit(grille, serpent) == 1) {
             serpent->fruits+=1;
+            quelserpent = 1;
             ajouter_sec_fin(serpent->l, creer_section(1,serpent->tete[0],serpent->tete[1]));
             if(mode_chosen == '2' || mode_chosen == '3')
             {
                 grille->couleur_snake = grille->couleur_fruit;
                 
             }
-            if(serpent->fruits>=(20)){
+            if(serpent->fruits>=(grille->n*grille->m /4)){
                     endscreen_win(serpent);
                     return;
                 }
-
         }
-        
+
+        if(mode_chosen == '3')
+        {
+            if (atefruit(grille, serpent2) == 1) {
+                serpent2->fruits+=1;
+                quelserpent = 2;
+                ajouter_sec_fin(serpent2->l, creer_section(1,serpent2->tete[0],serpent2->tete[1]));
+                if(mode_chosen == '2' || mode_chosen == '3')
+                {
+                    grille->couleur_snake = grille->couleur_fruit;
+                
+                }
+                if(serpent->fruits>=(grille->n*grille->m /4)){
+                        endscreen_win(serpent);
+                        return;
+                }
+            }
+        }
+
         //if on a le mode worm
         if (mode_chosen == '1')
         {
@@ -157,7 +183,10 @@ void move_serpent(g* grille, unsigned mode_chosen)
         //et pas dans les cases
 
         refresh();
-        draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen, serpent2);
+        if(quelserpent == 1)
+            draw_Grille(grille, serpent, atefruit(grille, serpent), mode_chosen, serpent2);
+        else
+            draw_Grille(grille, serpent, atefruit(grille, serpent2), mode_chosen, serpent2);
 
     }
         

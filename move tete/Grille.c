@@ -43,7 +43,7 @@ void Grille_vider(g * grille)
 
 int Case_vide(g* grille,int x, int y)
 {
-    if(strcmp(grille->tab[x][y]->elem,"body")==0 ||strcmp(grille->tab[x][y]->elem,"tete")==0 || strcmp(grille->tab[x][y]->elem,"mob")==0){
+    if(strcmp(grille->tab[x][y]->elem,"body")==0 ||strcmp(grille->tab[x][y]->elem,"tete")==0 || strcmp(grille->tab[x][y]->elem,"mob")==0 || strcmp(grille->tab[x][y]->elem,"fruit")==0){
         return 1;
     }
     return 0;
